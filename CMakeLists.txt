@@ -1,0 +1,17 @@
+cmake_minimum_required(VERSION 3.14)
+add_subdirectory(rm)
+add_subdirectory(pf)
+add_subdirectory(sm)
+add_subdirectory(ix)
+add_subdirectory(ql)
+add_subdirectory(parser)
+add_subdirectory(utils)
+
+add_definitions(-DDEBUG)
+add_definitions("-Wall -g")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+add_library(${CMAKE_PROJECT_NAME}_lib ${SOURCE} ${HEADERS})
+add_executable(${CMAKE_PROJECT_NAME} main.cpp)
+# target_link_libraries(${CMAKE_PROJECT_NAME} SqlParser ${CMAKE_PROJECT_NAME}_lib)
+target_link_libraries(${CMAKE_PROJECT_NAME} ${CMAKE_PROJECT_NAME}_lib)

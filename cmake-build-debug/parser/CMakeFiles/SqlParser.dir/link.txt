@@ -1,0 +1,2 @@
+/Library/Developer/CommandLineTools/usr/bin/ar qc libSqlParser.a  CMakeFiles/SqlParser.dir/parser.tab.cpp.o CMakeFiles/SqlParser.dir/parser.yy.cpp.o CMakeFiles/SqlParser.dir/Execute.cpp.o
+/Library/Developer/CommandLineTools/usr/bin/ranlib libSqlParser.a
