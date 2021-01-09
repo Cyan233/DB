@@ -48,10 +48,10 @@ RM = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/cyan/Desktop/2020autumn/数据库/mylab/DB
+CMAKE_SOURCE_DIR = /Users/cyan/Desktop/2020autumn/数据库/DB
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/cyan/Desktop/2020autumn/数据库/mylab/DB/cmake-build-debug
+CMAKE_BINARY_DIR = /Users/cyan/Desktop/2020autumn/数据库/DB/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/cyan/Desktop/2020autumn/数据库/mylab/DB/cmake-build-debug/CMakeFiles /Users/cyan/Desktop/2020autumn/数据库/mylab/DB/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/cyan/Desktop/2020autumn/数据库/DB/cmake-build-debug/CMakeFiles /Users/cyan/Desktop/2020autumn/数据库/DB/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/cyan/Desktop/2020autumn/数据库/mylab/DB/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/cyan/Desktop/2020autumn/数据库/DB/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -135,19 +135,6 @@ Project_lib: cmake_check_build_system
 Project_lib/fast:
 	$(MAKE) -f CMakeFiles/Project_lib.dir/build.make CMakeFiles/Project_lib.dir/build
 .PHONY : Project_lib/fast
-
-#=============================================================================
-# Target rules for targets named SqlParser
-
-# Build rule for target.
-SqlParser: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 SqlParser
-.PHONY : SqlParser
-
-# fast build rule for target.
-SqlParser/fast:
-	$(MAKE) -f parser/CMakeFiles/SqlParser.dir/build.make parser/CMakeFiles/SqlParser.dir/build
-.PHONY : SqlParser/fast
 
 ix/IX_FindSpeRec.o: ix/IX_FindSpeRec.cpp.o
 
@@ -256,33 +243,6 @@ main.s: main.cpp.s
 main.cpp.s:
 	$(MAKE) -f CMakeFiles/Project.dir/build.make CMakeFiles/Project.dir/main.cpp.s
 .PHONY : main.cpp.s
-
-parser/Expr.o: parser/Expr.cpp.o
-
-.PHONY : parser/Expr.o
-
-# target to build an object file
-parser/Expr.cpp.o:
-	$(MAKE) -f CMakeFiles/Project_lib.dir/build.make CMakeFiles/Project_lib.dir/parser/Expr.cpp.o
-.PHONY : parser/Expr.cpp.o
-
-parser/Expr.i: parser/Expr.cpp.i
-
-.PHONY : parser/Expr.i
-
-# target to preprocess a source file
-parser/Expr.cpp.i:
-	$(MAKE) -f CMakeFiles/Project_lib.dir/build.make CMakeFiles/Project_lib.dir/parser/Expr.cpp.i
-.PHONY : parser/Expr.cpp.i
-
-parser/Expr.s: parser/Expr.cpp.s
-
-.PHONY : parser/Expr.s
-
-# target to generate assembly for a file
-parser/Expr.cpp.s:
-	$(MAKE) -f CMakeFiles/Project_lib.dir/build.make CMakeFiles/Project_lib.dir/parser/Expr.cpp.s
-.PHONY : parser/Expr.cpp.s
 
 pf/pf_buffermgr.o: pf/pf_buffermgr.cc.o
 
@@ -500,33 +460,6 @@ ql/QueryManager.cpp.s:
 	$(MAKE) -f CMakeFiles/Project_lib.dir/build.make CMakeFiles/Project_lib.dir/ql/QueryManager.cpp.s
 .PHONY : ql/QueryManager.cpp.s
 
-ql/Table.o: ql/Table.cpp.o
-
-.PHONY : ql/Table.o
-
-# target to build an object file
-ql/Table.cpp.o:
-	$(MAKE) -f CMakeFiles/Project_lib.dir/build.make CMakeFiles/Project_lib.dir/ql/Table.cpp.o
-.PHONY : ql/Table.cpp.o
-
-ql/Table.i: ql/Table.cpp.i
-
-.PHONY : ql/Table.i
-
-# target to preprocess a source file
-ql/Table.cpp.i:
-	$(MAKE) -f CMakeFiles/Project_lib.dir/build.make CMakeFiles/Project_lib.dir/ql/Table.cpp.i
-.PHONY : ql/Table.cpp.i
-
-ql/Table.s: ql/Table.cpp.s
-
-.PHONY : ql/Table.s
-
-# target to generate assembly for a file
-ql/Table.cpp.s:
-	$(MAKE) -f CMakeFiles/Project_lib.dir/build.make CMakeFiles/Project_lib.dir/ql/Table.cpp.s
-.PHONY : ql/Table.cpp.s
-
 rm/RM_FileHandle.o: rm/RM_FileHandle.cpp.o
 
 .PHONY : rm/RM_FileHandle.o
@@ -560,6 +493,7 @@ rm/RM_FileScan.o: rm/RM_FileScan.cpp.o
 
 # target to build an object file
 rm/RM_FileScan.cpp.o:
+	$(MAKE) -f CMakeFiles/Project.dir/build.make CMakeFiles/Project.dir/rm/RM_FileScan.cpp.o
 	$(MAKE) -f CMakeFiles/Project_lib.dir/build.make CMakeFiles/Project_lib.dir/rm/RM_FileScan.cpp.o
 .PHONY : rm/RM_FileScan.cpp.o
 
@@ -569,6 +503,7 @@ rm/RM_FileScan.i: rm/RM_FileScan.cpp.i
 
 # target to preprocess a source file
 rm/RM_FileScan.cpp.i:
+	$(MAKE) -f CMakeFiles/Project.dir/build.make CMakeFiles/Project.dir/rm/RM_FileScan.cpp.i
 	$(MAKE) -f CMakeFiles/Project_lib.dir/build.make CMakeFiles/Project_lib.dir/rm/RM_FileScan.cpp.i
 .PHONY : rm/RM_FileScan.cpp.i
 
@@ -578,6 +513,7 @@ rm/RM_FileScan.s: rm/RM_FileScan.cpp.s
 
 # target to generate assembly for a file
 rm/RM_FileScan.cpp.s:
+	$(MAKE) -f CMakeFiles/Project.dir/build.make CMakeFiles/Project.dir/rm/RM_FileScan.cpp.s
 	$(MAKE) -f CMakeFiles/Project_lib.dir/build.make CMakeFiles/Project_lib.dir/rm/RM_FileScan.cpp.s
 .PHONY : rm/RM_FileScan.cpp.s
 
@@ -635,33 +571,6 @@ sm/SM_Manager.cpp.s:
 	$(MAKE) -f CMakeFiles/Project_lib.dir/build.make CMakeFiles/Project_lib.dir/sm/SM_Manager.cpp.s
 .PHONY : sm/SM_Manager.cpp.s
 
-utils/Date.o: utils/Date.cpp.o
-
-.PHONY : utils/Date.o
-
-# target to build an object file
-utils/Date.cpp.o:
-	$(MAKE) -f CMakeFiles/Project.dir/build.make CMakeFiles/Project.dir/utils/Date.cpp.o
-.PHONY : utils/Date.cpp.o
-
-utils/Date.i: utils/Date.cpp.i
-
-.PHONY : utils/Date.i
-
-# target to preprocess a source file
-utils/Date.cpp.i:
-	$(MAKE) -f CMakeFiles/Project.dir/build.make CMakeFiles/Project.dir/utils/Date.cpp.i
-.PHONY : utils/Date.cpp.i
-
-utils/Date.s: utils/Date.cpp.s
-
-.PHONY : utils/Date.s
-
-# target to generate assembly for a file
-utils/Date.cpp.s:
-	$(MAKE) -f CMakeFiles/Project.dir/build.make CMakeFiles/Project.dir/utils/Date.cpp.s
-.PHONY : utils/Date.cpp.s
-
 utils/MyBitMap.o: utils/MyBitMap.cpp.o
 
 .PHONY : utils/MyBitMap.o
@@ -699,7 +608,6 @@ help:
 	@echo "... edit_cache"
 	@echo "... Project"
 	@echo "... Project_lib"
-	@echo "... SqlParser"
 	@echo "... ix/IX_FindSpeRec.o"
 	@echo "... ix/IX_FindSpeRec.i"
 	@echo "... ix/IX_FindSpeRec.s"
@@ -712,9 +620,6 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
-	@echo "... parser/Expr.o"
-	@echo "... parser/Expr.i"
-	@echo "... parser/Expr.s"
 	@echo "... pf/pf_buffermgr.o"
 	@echo "... pf/pf_buffermgr.i"
 	@echo "... pf/pf_buffermgr.s"
@@ -739,9 +644,6 @@ help:
 	@echo "... ql/QueryManager.o"
 	@echo "... ql/QueryManager.i"
 	@echo "... ql/QueryManager.s"
-	@echo "... ql/Table.o"
-	@echo "... ql/Table.i"
-	@echo "... ql/Table.s"
 	@echo "... rm/RM_FileHandle.o"
 	@echo "... rm/RM_FileHandle.i"
 	@echo "... rm/RM_FileHandle.s"
@@ -754,9 +656,6 @@ help:
 	@echo "... sm/SM_Manager.o"
 	@echo "... sm/SM_Manager.i"
 	@echo "... sm/SM_Manager.s"
-	@echo "... utils/Date.o"
-	@echo "... utils/Date.i"
-	@echo "... utils/Date.s"
 	@echo "... utils/MyBitMap.o"
 	@echo "... utils/MyBitMap.i"
 	@echo "... utils/MyBitMap.s"

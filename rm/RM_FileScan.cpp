@@ -1,71 +1,52 @@
 //
-// Created by cyan on 2020/10/24.
+// Created by cyan on 2021/1/9.
 //
 
 #include "RM_FileScan.h"
 #include "RecordManager.h"
+#include "vector"
 
 
-RM_FileScan::~RM_FileScan(){
-    delete[] bitdata;
+bool satisfy(const vector<Condition> &conditions, char* data, tbinfos tb_info){
+    for(auto &condition: conditions){ //对于每一个条件，都要满足
+        int offset = 0;
+        for(int i=0; i<tb_info.columns; i++) {  //查找该条件对应的列
+            if(strcmp(condition.attr_name, tb_info.attrname[i])){
+                bool ok = false;
+                switch (tb_info.colattr[i]){
+                    case AttrType::DATE :
+                    case AttrType::INT :{
+                        int vi = *reinterpret_cast<int *>(data+offset);
+                        ok = compare(vi, condition.compare_value.i, condition.compOp);
+                        break;
+                    }
+                    case AttrType::FLOAT : {
+                        float vf = *reinterpret_cast<float *>(data + offset);
+                        ok = compare(vf, condition.compare_value.f, condition.compOp);
+                        break;
+                    }
+                }
+                if(ok)
+                    break;  //比对下一个条件
+                else
+                    return false;
+            }
+            offset += tb_info.attrsize[i];
+        }
+    }
+    return true;
 }
 
-int RM_FileScan::startScan(RM_FileHandle *_file_handle, Expr *_condition, const string &_tableName) {
+int RM_FileScan::startScan(RM_FileHandle *_file_handle, vector<Condition> *_conditions, const std::string &_tableName) {
     file_handle = _file_handle;
     curRID.pageID = 1;   //当前的页
     curRID.slotID = 0;   //当前的槽
-    condition = _condition;
+    conditions = _conditions;
     delete[] bitdata;
     bitdata = new char[file_handle->table_header.slot_map_size];
-    tableName = _tableName;
     return 0;
 }
 
-int RM_FileScan::openScan(RM_FileHandle *fileHandle, AttrType attrType, int attrSize, int attrOffset,
-        CompOp compOp, void *value) {  //判断条件
-    Expr *_condition = nullptr;
-    if (compOp != CompOp::NO_OP) {
-        Expr *left = new Expr();
-        left->attrInfo.attrSize = attrSize;
-        left->attrInfo.attrOffset = attrOffset;
-        left->attrInfo.attrType = attrType;
-        left->attrInfo.notNull = false;
-        left->nodeType = NodeType::ATTR_NODE;
-
-        Expr *right;
-        if (value == nullptr || attrType==AttrType::VARCHAR || attrType==AttrType::NO_ATTR)
-            right = new Expr();
-        else {
-            switch (attrType) {
-                case AttrType::INT:
-                case AttrType::DATE: {
-                    int i = *reinterpret_cast<int *>(value);
-                    right = new Expr(i);
-                    break;
-                }
-                case AttrType::FLOAT: {
-                    float f = *reinterpret_cast<float *>(value);
-                    right = new Expr(f);
-                    break;
-                }
-                case AttrType::BOOL: {
-                    bool b = *reinterpret_cast<bool *>(value);
-                    right = new Expr(b);
-                    break;
-                }
-                case AttrType::STRING: {
-                    char *s = reinterpret_cast<char *>(value);
-                    right = new Expr(s);
-                    break;
-                }
-                default:
-                    right = new Expr();
-            }
-        }
-        _condition = new Expr(left, compOp, right);
-    }
-    return startScan(fileHandle, _condition, "");
-}
 
 int RM_FileScan::getNextRecord(Record& record) {
     char *data;
@@ -86,14 +67,7 @@ int RM_FileScan::getNextRecord(Record& record) {
             // 看是否符合要求
             rc = file_handle->getRecord(curRID, record);
             TEST_RC_NOT_ZERO_ERROR
-            if(condition== nullptr){
-                found = true;
-                break;
-            }
-            condition->init_calculate(tableName);
-            condition->calculate(record.data, tableName);
-            if (not condition->calculated or condition->is_true()) {
-                condition->init_calculate(tableName);
+            if (satisfy(*conditions, record.data, file_handle->table_header.tb_info)) {
                 found = true;
                 break;
             }

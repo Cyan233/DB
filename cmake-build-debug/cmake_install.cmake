@@ -1,4 +1,4 @@
-# Install script for directory: /Users/cyan/Desktop/2020autumn/数据库/mylab/DB
+# Install script for directory: /Users/cyan/Desktop/2020autumn/数据库/DB
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,37 +34,32 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/Users/cyan/Desktop/2020autumn/数据库/mylab/DB/cmake-build-debug/rm/cmake_install.cmake")
+  include("/Users/cyan/Desktop/2020autumn/数据库/DB/cmake-build-debug/rm/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/Users/cyan/Desktop/2020autumn/数据库/mylab/DB/cmake-build-debug/pf/cmake_install.cmake")
+  include("/Users/cyan/Desktop/2020autumn/数据库/DB/cmake-build-debug/pf/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/Users/cyan/Desktop/2020autumn/数据库/mylab/DB/cmake-build-debug/sm/cmake_install.cmake")
+  include("/Users/cyan/Desktop/2020autumn/数据库/DB/cmake-build-debug/sm/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/Users/cyan/Desktop/2020autumn/数据库/mylab/DB/cmake-build-debug/ix/cmake_install.cmake")
+  include("/Users/cyan/Desktop/2020autumn/数据库/DB/cmake-build-debug/ix/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/Users/cyan/Desktop/2020autumn/数据库/mylab/DB/cmake-build-debug/ql/cmake_install.cmake")
+  include("/Users/cyan/Desktop/2020autumn/数据库/DB/cmake-build-debug/ql/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/Users/cyan/Desktop/2020autumn/数据库/mylab/DB/cmake-build-debug/parser/cmake_install.cmake")
-endif()
-
-if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for the subdirectory.
-  include("/Users/cyan/Desktop/2020autumn/数据库/mylab/DB/cmake-build-debug/utils/cmake_install.cmake")
+  include("/Users/cyan/Desktop/2020autumn/数据库/DB/cmake-build-debug/utils/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -75,5 +70,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/cyan/Desktop/2020autumn/数据库/mylab/DB/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/Users/cyan/Desktop/2020autumn/数据库/DB/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

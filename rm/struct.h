@@ -7,6 +7,8 @@
 
 #include <cstring>
 #include <cstdio>
+#include "../sm/SM_type.h"
+using namespace std;
 
 struct RID{  // record_id
     long pageID = 0;
@@ -40,6 +42,47 @@ struct TableHeader {  //整张表的特征信息，存储在第一页
     unsigned slot_per_page;
     unsigned slot_map_size;   //单位是Byte
     bool is_modified = false;
+
+    tbinfos tb_info;
 };
+
+union value{
+    int i;
+    float f;
+    char* s;
+};
+
+struct Condition{  //比如 a<100
+    CompOp compOp;
+    char attr_name[100];
+    value compare_value;
+};
+
+
+template<typename T>
+bool compare(const T &a, const T &b, CompOp compOp) {
+    switch (compOp) {
+        case CompOp::EQ_OP:
+            return a == b;
+        case CompOp::GE_OP:
+            return a >= b;
+        case CompOp::GT_OP:
+            return a > b;
+        case CompOp::LE_OP:
+            return a <= b;
+        case CompOp::LT_OP:
+            return a < b;
+        case CompOp::NE_OP:
+            return a != b;
+        case CompOp::NO_OP:  // not null
+            return true;
+        case CompOp::IS_OP:  // is null
+            // todo implement this
+            break;
+        default:
+            return false;
+    }
+    return false;
+}
 
 #endif //DB_STRUCT_H

@@ -6,6 +6,7 @@
 #ifndef SM_TYPE_H
 #define SM_TYPE_H
 #include"../Constants.h"
+using namespace std;
 
 struct dbinfos{
     char dbname[100];

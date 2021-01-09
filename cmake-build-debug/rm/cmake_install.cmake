@@ -1,4 +1,4 @@
-# Install script for directory: /Users/cyan/Desktop/2020autumn/数据库/mylab/DB/rm
+# Install script for directory: /Users/cyan/Desktop/2020autumn/数据库/DB/rm
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

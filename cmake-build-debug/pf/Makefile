@@ -48,10 +48,10 @@ RM = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/cyan/Desktop/2020autumn/数据库/mylab/DB
+CMAKE_SOURCE_DIR = /Users/cyan/Desktop/2020autumn/数据库/DB
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/cyan/Desktop/2020autumn/数据库/mylab/DB/cmake-build-debug
+CMAKE_BINARY_DIR = /Users/cyan/Desktop/2020autumn/数据库/DB/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,14 +80,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /Users/cyan/Desktop/2020autumn/数据库/mylab/DB/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_progress_start /Users/cyan/Desktop/2020autumn/数据库/mylab/DB/cmake-build-debug/CMakeFiles /Users/cyan/Desktop/2020autumn/数据库/mylab/DB/cmake-build-debug/pf/CMakeFiles/progress.marks
-	cd /Users/cyan/Desktop/2020autumn/数据库/mylab/DB/cmake-build-debug && $(MAKE) -f CMakeFiles/Makefile2 pf/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/cyan/Desktop/2020autumn/数据库/mylab/DB/cmake-build-debug/CMakeFiles 0
+	cd /Users/cyan/Desktop/2020autumn/数据库/DB/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_progress_start /Users/cyan/Desktop/2020autumn/数据库/DB/cmake-build-debug/CMakeFiles /Users/cyan/Desktop/2020autumn/数据库/DB/cmake-build-debug/pf/CMakeFiles/progress.marks
+	cd /Users/cyan/Desktop/2020autumn/数据库/DB/cmake-build-debug && $(MAKE) -f CMakeFiles/Makefile2 pf/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/cyan/Desktop/2020autumn/数据库/DB/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /Users/cyan/Desktop/2020autumn/数据库/mylab/DB/cmake-build-debug && $(MAKE) -f CMakeFiles/Makefile2 pf/clean
+	cd /Users/cyan/Desktop/2020autumn/数据库/DB/cmake-build-debug && $(MAKE) -f CMakeFiles/Makefile2 pf/clean
 .PHONY : clean
 
 # The main clean target
@@ -97,17 +97,17 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /Users/cyan/Desktop/2020autumn/数据库/mylab/DB/cmake-build-debug && $(MAKE) -f CMakeFiles/Makefile2 pf/preinstall
+	cd /Users/cyan/Desktop/2020autumn/数据库/DB/cmake-build-debug && $(MAKE) -f CMakeFiles/Makefile2 pf/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /Users/cyan/Desktop/2020autumn/数据库/mylab/DB/cmake-build-debug && $(MAKE) -f CMakeFiles/Makefile2 pf/preinstall
+	cd /Users/cyan/Desktop/2020autumn/数据库/DB/cmake-build-debug && $(MAKE) -f CMakeFiles/Makefile2 pf/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /Users/cyan/Desktop/2020autumn/数据库/mylab/DB/cmake-build-debug && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /Users/cyan/Desktop/2020autumn/数据库/DB/cmake-build-debug && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Help Target
@@ -129,6 +129,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /Users/cyan/Desktop/2020autumn/数据库/mylab/DB/cmake-build-debug && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /Users/cyan/Desktop/2020autumn/数据库/DB/cmake-build-debug && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 
