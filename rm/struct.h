@@ -52,10 +52,27 @@ union value{
     char* s;
 };
 
-struct Condition{  //比如 a<100
+struct Col{  //比如 a = 100
+    char tb_name[100];
+    char attr_name[100];
+};
+
+struct Condition{  //比如 name<100
     CompOp compOp;
     char attr_name[100];
     value compare_value;
+};
+
+struct Condition_joint{  //多表联查select时用到，如，where teacher.id = student.teacher_id and student.id < 100
+    bool joint; // =1表示是两表之间的比较，用到cols[2], =0表示是对一个表的限制，类似Condition
+    CompOp compOp;
+    Col cols[2];
+    value compare_value;
+};
+
+struct SetClause{  //比如 a = 100
+    char attr_name[100];
+    value set_value;
 };
 
 

@@ -20,7 +20,7 @@ class RM_FileScan {
     char *bitdata = nullptr;
     vector<Condition> *conditions;
 public:
-    int startScan(RM_FileHandle *_file_handle, vector<Condition> *_conditions, const std::string &_tableName);
+    int startScan(RM_FileHandle *_file_handle, vector<Condition> *_conditions);
     int getNextRecord(Record& record);
     ~RM_FileScan() { delete[] bitdata ;}
 };

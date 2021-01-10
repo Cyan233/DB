@@ -94,7 +94,7 @@ RC IX_Manager::CreateIndex(const char* filename, int indexnum, AttrType attrType
     RecordManager::getInstance().openFile(filename, sourcefile);
     cout<<"openFile success"<<endl;
     RM_FileScan sourcescan;
-    sourcescan.startScan(&sourcefile, nullptr, str.c_str());
+//    sourcescan.startScan(&sourcefile, nullptr, str.c_str());
     cout<<"startScan success"<<endl;
 
     while(!(sourcescan.getNextRecord(record))){

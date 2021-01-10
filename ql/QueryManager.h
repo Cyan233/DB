@@ -10,13 +10,13 @@ using namespace std;
 
 
 class QueryManager {
-//    int Select(const string& dbname, const vector<vector<value>>& records);
+    int Select(vector<string>& dbnames, vector<Condition_joint> &where_conditions, vector<Col>& selector);
 
     int Insert(const string& dbname, const vector<vector<value>>& records);
 
-//    int Update(std::string relation, SetClauseList *setClauses, Expr *whereClause);
+    int Update(const string& dbname, vector<Condition> &where_conditions, vector<SetClause>& set_clauses);
 
-//    int Delete(std::string relation, Expr *whereClause);
+    int Delete(const string& dbname, vector<Condition> &where_conditions);
 };
 
 
