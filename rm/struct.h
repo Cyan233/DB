@@ -52,22 +52,20 @@ union value{
     char* s;
 };
 
-struct Col{  //比如 a = 100
+struct Col{  //比如 teacher.name
     char tb_name[100];
     char attr_name[100];
 };
 
-struct Condition{  //比如 name<100
+struct Condition{  //比如 teacheer.name < 100
     CompOp compOp;
-    char attr_name[100];
+    Col col;
     value compare_value;
 };
 
-struct Condition_joint{  //多表联查select时用到，如，where teacher.id = student.teacher_id and student.id < 100
-    bool joint; // =1表示是两表之间的比较，用到cols[2], =0表示是对一个表的限制，类似Condition
+struct Condition_joint{  //比如 teacher.id = student.teacher_id
     CompOp compOp;
     Col cols[2];
-    value compare_value;
 };
 
 struct SetClause{  //比如 a = 100
@@ -100,6 +98,22 @@ bool compare(const T &a, const T &b, CompOp compOp) {
             return false;
     }
     return false;
+}
+
+CompOp switchLeftRight(CompOp compOp) {
+    switch (compOp) {
+        case CompOp::GE_OP:
+            return CompOp::LE_OP;
+        case CompOp::GT_OP:
+            return CompOp::LT_OP;
+        case CompOp::LE_OP:
+            return CompOp::GE_OP;
+        case CompOp::LT_OP:
+            return CompOp::GT_OP;
+            break;
+        default:
+            return compOp;
+    }
 }
 
 #endif //DB_STRUCT_H

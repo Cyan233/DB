@@ -11,7 +11,7 @@ bool satisfy(const vector<Condition> &conditions, char* data, tbinfos tb_info){
     for(auto &condition: conditions){ //对于每一个条件，都要满足
         int offset = 0;
         for(int i=0; i<tb_info.columns; i++) {  //查找该条件对应的列
-            if(strcmp(condition.attr_name, tb_info.attrname[i])==0){
+            if(strcmp(condition.col.attr_name, tb_info.attrname[i])==0){
                 bool ok = false;
                 switch (tb_info.colattr[i]){
                     case AttrType::DATE :

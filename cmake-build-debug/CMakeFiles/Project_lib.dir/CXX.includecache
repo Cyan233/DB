@@ -10,43 +10,27 @@
 string
 -
 
-/Users/cyan/Desktop/2020autumn/数据库/DB/ix/IX_IndexHandle.h
-../rm/struct.h
-/Users/cyan/Desktop/2020autumn/数据库/DB/rm/struct.h
-../pf/pf.h
 /Users/cyan/Desktop/2020autumn/数据库/DB/pf/pf.h
-
-/Users/cyan/Desktop/2020autumn/数据库/DB/ix/IX_Internal.h
-../pf/pf.h
-/Users/cyan/Desktop/2020autumn/数据库/DB/pf/pf.h
-../rm/struct.h
-/Users/cyan/Desktop/2020autumn/数据库/DB/rm/struct.h
 ../Constants.h
 /Users/cyan/Desktop/2020autumn/数据库/DB/Constants.h
 
-/Users/cyan/Desktop/2020autumn/数据库/DB/ix/IX_Manager.cpp
-IX_Manager.h
-/Users/cyan/Desktop/2020autumn/数据库/DB/ix/IX_Manager.h
-IX_IndexHandle.h
-/Users/cyan/Desktop/2020autumn/数据库/DB/ix/IX_IndexHandle.h
-IX_Internal.h
-/Users/cyan/Desktop/2020autumn/数据库/DB/ix/IX_Internal.h
+/Users/cyan/Desktop/2020autumn/数据库/DB/ql/QueryManager.cpp
+iostream
+/Users/cyan/Desktop/2020autumn/数据库/DB/ql/iostream
+QueryManager.h
+/Users/cyan/Desktop/2020autumn/数据库/DB/ql/QueryManager.h
 ../rm/RecordManager.h
 /Users/cyan/Desktop/2020autumn/数据库/DB/rm/RecordManager.h
 ../rm/RM_FileScan.h
 /Users/cyan/Desktop/2020autumn/数据库/DB/rm/RM_FileScan.h
-iostream
--
+vector
+/Users/cyan/Desktop/2020autumn/数据库/DB/ql/vector
 
-/Users/cyan/Desktop/2020autumn/数据库/DB/ix/IX_Manager.h
-../pf/pf.h
-/Users/cyan/Desktop/2020autumn/数据库/DB/pf/pf.h
-IX_IndexHandle.h
-/Users/cyan/Desktop/2020autumn/数据库/DB/ix/IX_IndexHandle.h
-
-/Users/cyan/Desktop/2020autumn/数据库/DB/pf/pf.h
-../Constants.h
-/Users/cyan/Desktop/2020autumn/数据库/DB/Constants.h
+/Users/cyan/Desktop/2020autumn/数据库/DB/ql/QueryManager.h
+../sm/SM_type.h
+/Users/cyan/Desktop/2020autumn/数据库/DB/sm/SM_type.h
+../rm/struct.h
+/Users/cyan/Desktop/2020autumn/数据库/DB/rm/struct.h
 
 /Users/cyan/Desktop/2020autumn/数据库/DB/rm/RM_FileHandle.h
 ../pf/pf.h

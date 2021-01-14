@@ -26,7 +26,8 @@ public:
     int insertRecord(const char *pData, RID& rid);
     int deleteRecord(const RID &rid);
     int updateRecord(const Record &rec);
+    TableHeader getHeader() {return table_header;}
 };
 
-
+bool satisfy(const vector<Condition> &conditions, char* data, tbinfos tb_info);
 #endif //DB_RM_FILEHANDLE_H
