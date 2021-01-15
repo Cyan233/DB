@@ -493,7 +493,6 @@ rm/RM_FileScan.o: rm/RM_FileScan.cpp.o
 
 # target to build an object file
 rm/RM_FileScan.cpp.o:
-	$(MAKE) -f CMakeFiles/Project.dir/build.make CMakeFiles/Project.dir/rm/RM_FileScan.cpp.o
 	$(MAKE) -f CMakeFiles/Project_lib.dir/build.make CMakeFiles/Project_lib.dir/rm/RM_FileScan.cpp.o
 .PHONY : rm/RM_FileScan.cpp.o
 
@@ -503,7 +502,6 @@ rm/RM_FileScan.i: rm/RM_FileScan.cpp.i
 
 # target to preprocess a source file
 rm/RM_FileScan.cpp.i:
-	$(MAKE) -f CMakeFiles/Project.dir/build.make CMakeFiles/Project.dir/rm/RM_FileScan.cpp.i
 	$(MAKE) -f CMakeFiles/Project_lib.dir/build.make CMakeFiles/Project_lib.dir/rm/RM_FileScan.cpp.i
 .PHONY : rm/RM_FileScan.cpp.i
 
@@ -513,7 +511,6 @@ rm/RM_FileScan.s: rm/RM_FileScan.cpp.s
 
 # target to generate assembly for a file
 rm/RM_FileScan.cpp.s:
-	$(MAKE) -f CMakeFiles/Project.dir/build.make CMakeFiles/Project.dir/rm/RM_FileScan.cpp.s
 	$(MAKE) -f CMakeFiles/Project_lib.dir/build.make CMakeFiles/Project_lib.dir/rm/RM_FileScan.cpp.s
 .PHONY : rm/RM_FileScan.cpp.s
 

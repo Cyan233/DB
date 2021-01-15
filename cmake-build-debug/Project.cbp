@@ -196,11 +196,9 @@
 			<Option target="Project_lib"/>
 		</Unit>
 		<Unit filename="/Users/cyan/Desktop/2020autumn/数据库/DB/rm/RM_FileScan.cpp">
-			<Option target="Project"/>
 			<Option target="Project_lib"/>
 		</Unit>
 		<Unit filename="/Users/cyan/Desktop/2020autumn/数据库/DB/rm/RM_FileScan.h">
-			<Option target="Project"/>
 			<Option target="Project_lib"/>
 		</Unit>
 		<Unit filename="/Users/cyan/Desktop/2020autumn/数据库/DB/rm/RecordManager.cpp">

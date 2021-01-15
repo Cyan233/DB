@@ -5,18 +5,7 @@ CMakeFiles/Project.dir/main.cpp.o: ../Constants.h
 CMakeFiles/Project.dir/main.cpp.o: ../main.cpp
 CMakeFiles/Project.dir/main.cpp.o: ../pf/pf.h
 CMakeFiles/Project.dir/main.cpp.o: ../rm/RM_FileHandle.h
-CMakeFiles/Project.dir/main.cpp.o: ../rm/RecordManager.h
 CMakeFiles/Project.dir/main.cpp.o: ../rm/struct.h
 CMakeFiles/Project.dir/main.cpp.o: ../sm/SM_type.h
 CMakeFiles/Project.dir/main.cpp.o: ../utils/MyBitMap.h
-
-CMakeFiles/Project.dir/rm/RM_FileScan.cpp.o: ../Constants.h
-CMakeFiles/Project.dir/rm/RM_FileScan.cpp.o: ../pf/pf.h
-CMakeFiles/Project.dir/rm/RM_FileScan.cpp.o: ../rm/RM_FileHandle.h
-CMakeFiles/Project.dir/rm/RM_FileScan.cpp.o: ../rm/RM_FileScan.cpp
-CMakeFiles/Project.dir/rm/RM_FileScan.cpp.o: ../rm/RM_FileScan.h
-CMakeFiles/Project.dir/rm/RM_FileScan.cpp.o: ../rm/RecordManager.h
-CMakeFiles/Project.dir/rm/RM_FileScan.cpp.o: ../rm/struct.h
-CMakeFiles/Project.dir/rm/RM_FileScan.cpp.o: ../sm/SM_type.h
-CMakeFiles/Project.dir/rm/RM_FileScan.cpp.o: ../utils/MyBitMap.h
 

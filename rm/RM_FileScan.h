@@ -25,5 +25,5 @@ public:
     ~RM_FileScan() { delete[] bitdata ;}
 };
 
-
+bool satisfy(const vector<Condition> &conditions, char* data, tbinfos tb_info);
 #endif //DB_RM_FILESCAN_H

@@ -139,7 +139,7 @@ void printSelect(Record& record, const vector<Col>& selector, tbinfos tb_info){
     }
 }
 
-int jointSelect(int level, vector<Record> path, const vector<Condition_joint> &conditions_joint, set<Record>* records,
+int jointSelect(int level, vector<Record> path, const vector<Condition_joint> &conditions_joint, vector<Record>* records,
         const vector<vector<Col>>& selector, const tbinfos* tbinfos, const vector<char*>& tbnames){
     if(level==0){
         for(int i=0;i<path.size();i++){
@@ -151,15 +151,14 @@ int jointSelect(int level, vector<Record> path, const vector<Condition_joint> &c
     for(auto& record: records[level]){  // 挑选一条，与其他表进行联合
         path.push_back(record);
         level--;
-        set<Record> new_records;
-        set<Record> old_records;
+        vector<Record> new_records;
         for(auto& condition: conditions_joint){ //更新比对条件
             if(strcmp(condition.cols[1].tb_name, tbnames[level]) == 0 || strcmp(condition.cols[0].tb_name,tbnames[level])==0){
                 int match = 0;
                 if(strcmp(condition.cols[1].tb_name, tbnames[level]) == 0 ){
                     new_codition.compOp = condition.compOp;
                     match = 1;
-                } else{
+                } else {
                     new_codition.compOp = switchLeftRight(condition.compOp);
                     match = 0;
                 }
@@ -187,12 +186,11 @@ int jointSelect(int level, vector<Record> path, const vector<Condition_joint> &c
                 for (int i = 0; i < tbnames.size(); i++) {
                     if(strcmp(tbnames[i], new_codition.col.tb_name)==0){
                         changed_col = i;
-                        old_records = records[i];
                         vector<Condition> new_vec;
                         new_vec.push_back(new_codition);
                         for(auto& rec:records[i]){
                             if(satisfy(new_vec, rec.data, tbinfos[i])){
-                                new_records.insert(rec);
+                                new_records.push_back(rec);
                             }
                         }
                         break;
@@ -200,6 +198,7 @@ int jointSelect(int level, vector<Record> path, const vector<Condition_joint> &c
                 }
             }
         }
+        vector<Record> old_records = records[changed_col];
         records[changed_col] = new_records;
         jointSelect(level-1, path, conditions_joint, records, selector, tbinfos, tbnames);
         records[changed_col] = old_records;
@@ -229,12 +228,12 @@ int QueryManager::Select(vector<char*>& tbnames, vector<vector<Col>>& selector, 
         cout<<endl;
     }
     // 2.存在多表联合的条件
-    auto* records = new set<Record>[tbnames.size()];
+    auto* records = new vector<Record>[tbnames.size()];
     // 先比较单表的条件，找到每个表里符合条件的RID
     for  (int i = 0; i < tbnames.size(); i++) {
         scan.startScan(&file_handle[i], &conditions[i]);
         while (scan.getNextRecord(record) == 0) {  //找得到记录，更改其值
-            records[i].insert(record);
+            records[i].push_back(record);
         }
     }
     // 对于每个多表条件，递归查找

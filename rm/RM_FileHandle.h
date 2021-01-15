@@ -29,5 +29,4 @@ public:
     TableHeader getHeader() {return table_header;}
 };
 
-bool satisfy(const vector<Condition> &conditions, char* data, tbinfos tb_info);
 #endif //DB_RM_FILEHANDLE_H
