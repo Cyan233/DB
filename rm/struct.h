@@ -8,6 +8,7 @@
 #include <cstring>
 #include <cstdio>
 #include "../sm/SM_type.h"
+#include <vector>
 using namespace std;
 
 struct RID{  // record_id

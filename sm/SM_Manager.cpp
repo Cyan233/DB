@@ -284,6 +284,10 @@ RC SM_Manager::CreateTable(const char *tbName, tbinfos *tbinfo)
             break;
         }
     }
+
+    //init tbinfos
+    tbinfo->fkey_num = 0;
+
     //create table
     //mm: to do maybe modify the parameter nullable
     RecordManager::getInstance().createFile(tbName, tbinfo->recordsize, 0);
@@ -294,41 +298,40 @@ RC SM_Manager::CreateTable(const char *tbName, tbinfos *tbinfo)
     PF_FileHandle file_handle;
     PF_PageHandle page_handle;
     PF_Manager pf_manager;
+    /*
     string str1(tbName);
     string str = str1 + "_tableinfo";
     rc = pf_manager.CreateFile(str.c_str());
     cout << "Create file success" << endl;
-    TEST_RC_NOT_ZERO_ERROR
+    TEST_RC_NOT_ZERO_ERROR*/
+    string str(tbName);
     rc = pf_manager.OpenFile(str.c_str(), file_handle);
     cout << "Open file success" << endl;
     TEST_RC_NOT_ZERO_ERROR
 
-    rc = file_handle.AllocatePage(page_handle);
-    cout << "AllocatePage 1 success" << endl;
-    PageNum page1;
-    page_handle.GetPageNum(page1);
-    cout << "page number is:" << page1;
+    rc = file_handle.GetFirstPage(page_handle);
     TEST_RC_NOT_ZERO_ERROR
 
     cout << "write data in tbinfo" << endl;
     char *wpdata;
     rc = page_handle.GetData(wpdata);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "no zero error after write data in tbinfo" << endl;
-    auto wtbinfo = reinterpret_cast<tbinfos *>(wpdata);
-    cout << "wpdata is " << wpdata << endl;
-    cout << "after" << endl;
+    //cout << "no zero error after write data in tbinfo" << endl;
+    auto wheader = reinterpret_cast<TableHeader *>(wpdata);
+    auto wtbinfo = &(wheader->tb_info);
+    //cout << "wpdata is " << wpdata << endl;
+    //cout << "after" << endl;
     copy_tbinfos(wtbinfo, tbinfo);
     //cout<<"wtbinfo->columns:"<<wtbinfo->columns<<endl;
     wtbinfo->strsize = strlen(tbName);
     strncpy(wtbinfo->tbname, tbName, wtbinfo->strsize);
     //write back
-    rc = file_handle.MarkDirty(page1);
+    rc = file_handle.MarkDirty(0);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "MarkDirty page 1 success" << endl;
-    rc = file_handle.UnpinPage(page1);
+    cout << "MarkDirty page 0 success" << endl;
+    rc = file_handle.UnpinPage(0);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "UnpinPage page 1 success" << endl;
+    cout << "UnpinPage page 0 success" << endl;
     rc = pf_manager.CloseFile(file_handle);
     TEST_RC_NOT_ZERO_ERROR
     cout << "write table info success" << endl
@@ -365,11 +368,11 @@ RC SM_Manager::DropTable(const char *tbName)
     RC rc;
     PF_Manager pf_manager;
     string str1(tbName);
-    string str = str1 + "_tableinfo";
+    //string str = str1 + "_tableinfo";
     rc = pf_manager.DestroyFile(tbName);
     TEST_RC_NOT_ZERO_ERROR
-    rc = pf_manager.DestroyFile(str.c_str());
-    TEST_RC_NOT_ZERO_ERROR
+    //rc = pf_manager.DestroyFile(str.c_str());
+    //TEST_RC_NOT_ZERO_ERROR
     cout << "drop table " << tbName << " success" << endl;
     return 0;
 }
@@ -477,8 +480,9 @@ RC SM_Manager::CreatePK(const char *tbName, int pkey)
     PF_PageHandle page_handle;
     PF_Manager pf_manager;
     string str1(tbName);
-    string str = str1 + "_tableinfo";
-    rc = pf_manager.OpenFile(str.c_str(), file_handle);
+    //string str = str1 + "_tableinfo";
+    //rc = pf_manager.OpenFile(str.c_str(), file_handle);
+    rc = pf_manager.OpenFile(str1.c_str(), file_handle);
     cout << "Open file success" << endl;
     TEST_RC_NOT_ZERO_ERROR
 
@@ -490,7 +494,8 @@ RC SM_Manager::CreatePK(const char *tbName, int pkey)
     char *wpdata;
     rc = page_handle.GetData(wpdata);
     TEST_RC_NOT_ZERO_ERROR
-    auto wtbinfo = reinterpret_cast<tbinfos *>(wpdata);
+    auto wheader = reinterpret_cast<TableHeader *>(wpdata);
+    auto wtbinfo = &(wheader->tb_info);
     wtbinfo->primary_key = pkey;
     wtbinfo->has_pkey = true;
     cout << "add primary key completely" << endl;
@@ -519,8 +524,8 @@ RC SM_Manager::DropPK(const char *tbName)
     PF_PageHandle page_handle;
     PF_Manager pf_manager;
     string str1(tbName);
-    string str = str1 + "_tableinfo";
-    rc = pf_manager.OpenFile(str.c_str(), file_handle);
+    //string str = str1 + "_tableinfo";
+    rc = pf_manager.OpenFile(str1.c_str(), file_handle);
     cout << "Open file success" << endl;
     TEST_RC_NOT_ZERO_ERROR
 
@@ -532,7 +537,9 @@ RC SM_Manager::DropPK(const char *tbName)
     char *wpdata;
     rc = page_handle.GetData(wpdata);
     TEST_RC_NOT_ZERO_ERROR
-    auto wtbinfo = reinterpret_cast<tbinfos *>(wpdata);
+    auto wheader = reinterpret_cast<TableHeader *>(wpdata);
+    auto wtbinfo = &(wheader->tb_info);
+    //auto wtbinfo = reinterpret_cast<tbinfos *>(wpdata);
     wtbinfo->has_pkey = false;
     cout << "drop primary key completely" << endl;
 
@@ -559,8 +566,8 @@ RC SM_Manager::CreateFK(const char *tbName, int fkey, const char *refertbname)
     PF_PageHandle page_handle;
     PF_Manager pf_manager;
     string str1(tbName);
-    string str = str1 + "_tableinfo";
-    rc = pf_manager.OpenFile(str.c_str(), file_handle);
+    //string str = str1 + "_tableinfo";
+    rc = pf_manager.OpenFile(str1.c_str(), file_handle);
     cout << "Open file success" << endl;
     TEST_RC_NOT_ZERO_ERROR
 
@@ -572,7 +579,11 @@ RC SM_Manager::CreateFK(const char *tbName, int fkey, const char *refertbname)
     char *wpdata;
     rc = page_handle.GetData(wpdata);
     TEST_RC_NOT_ZERO_ERROR
-    auto wtbinfo = reinterpret_cast<tbinfos *>(wpdata);
+    auto wheader = reinterpret_cast<TableHeader *>(wpdata);
+    auto wtbinfo = &(wheader->tb_info);
+    //auto wtbinfo = reinterpret_cast<tbinfos *>(wpdata);
+    cout<<"temp"<<endl<<endl;
+    cout<<"wtbinfo->fkey_num is "<<wtbinfo->fkey_num<<endl;
     wtbinfo->foreign_key[wtbinfo->fkey_num] = fkey;
     wtbinfo->rnsize[wtbinfo->fkey_num] = strlen(tbName);
     strncpy(wtbinfo->reference[wtbinfo->fkey_num], tbName, wtbinfo->fkey_num);
@@ -603,8 +614,8 @@ RC SM_Manager::DropFK(const char *tbName, int fkey, const char *refertbname)
     PF_PageHandle page_handle;
     PF_Manager pf_manager;
     string str1(tbName);
-    string str = str1 + "_tableinfo";
-    rc = pf_manager.OpenFile(str.c_str(), file_handle);
+    //string str = str1 + "_tableinfo";
+    rc = pf_manager.OpenFile(str1.c_str(), file_handle);
     cout << "Open file success" << endl;
     TEST_RC_NOT_ZERO_ERROR
 
@@ -616,7 +627,9 @@ RC SM_Manager::DropFK(const char *tbName, int fkey, const char *refertbname)
     char *wpdata;
     rc = page_handle.GetData(wpdata);
     TEST_RC_NOT_ZERO_ERROR
-    auto wtbinfo = reinterpret_cast<tbinfos *>(wpdata);
+    auto wheader = reinterpret_cast<TableHeader *>(wpdata);
+    auto wtbinfo = &(wheader->tb_info);
+    //auto wtbinfo = reinterpret_cast<tbinfos *>(wpdata);
     for (int i = 0; i < wtbinfo->fkey_num; ++i)
     {
         if (wtbinfo->foreign_key[i] == fkey && wtbinfo->rnsize[i] == strlen(refertbname) && strncmp(wtbinfo->reference[i], refertbname, wtbinfo->rnsize[i]) == 0)
@@ -657,8 +670,8 @@ RC SM_Manager::AddColumn(const char *tbName, AttrType attrt, const char *attrnam
     PF_PageHandle page_handle;
     PF_Manager pf_manager;
     string str1(tbName);
-    string str = str1 + "_tableinfo";
-    rc = pf_manager.OpenFile(str.c_str(), file_handle);
+    //string str = str1 + "_tableinfo";
+    rc = pf_manager.OpenFile(str1.c_str(), file_handle);
     cout << "Open file success" << endl;
     TEST_RC_NOT_ZERO_ERROR
 
@@ -673,7 +686,9 @@ RC SM_Manager::AddColumn(const char *tbName, AttrType attrt, const char *attrnam
     char *wpdata;
     rc = page_handle.GetData(wpdata);
     TEST_RC_NOT_ZERO_ERROR
-    auto wtbinfo = reinterpret_cast<tbinfos *>(wpdata);
+    auto wheader = reinterpret_cast<TableHeader *>(wpdata);
+    auto wtbinfo = &(wheader->tb_info);
+    //auto wtbinfo = reinterpret_cast<tbinfos *>(wpdata);
 
     wtbinfo->colattr[wtbinfo->columns] = attrt;
     wtbinfo->attrsize[wtbinfo->columns] = strlen(attrname);
@@ -733,8 +748,8 @@ RC SM_Manager::DropColumn(const char *tbName, AttrType attrt, const char *attrna
     PF_PageHandle page_handle;
     PF_Manager pf_manager;
     string str1(tbName);
-    string str = str1 + "_tableinfo";
-    rc = pf_manager.OpenFile(str.c_str(), file_handle);
+    //string str = str1 + "_tableinfo";
+    rc = pf_manager.OpenFile(str1.c_str(), file_handle);
     cout << "Open file success" << endl;
     TEST_RC_NOT_ZERO_ERROR
 
@@ -749,7 +764,9 @@ RC SM_Manager::DropColumn(const char *tbName, AttrType attrt, const char *attrna
     char *wpdata;
     rc = page_handle.GetData(wpdata);
     TEST_RC_NOT_ZERO_ERROR
-    auto wtbinfo = reinterpret_cast<tbinfos *>(wpdata);
+    auto wheader = reinterpret_cast<TableHeader *>(wpdata);
+    auto wtbinfo = &(wheader->tb_info);
+    //auto wtbinfo = reinterpret_cast<tbinfos *>(wpdata);
 
     //todo 此处直接置空 maybe 改进
     for (int i = 0; i < wtbinfo->columns; ++i)
@@ -786,8 +803,8 @@ RC SM_Manager::ModifiedColumn(const char *tbName, AttrType src_attrt, const char
     PF_PageHandle page_handle;
     PF_Manager pf_manager;
     string str1(tbName);
-    string str = str1 + "_tableinfo";
-    rc = pf_manager.OpenFile(str.c_str(), file_handle);
+    //string str = str1 + "_tableinfo";
+    rc = pf_manager.OpenFile(str1.c_str(), file_handle);
     cout << "Open file success" << endl;
     TEST_RC_NOT_ZERO_ERROR
 
@@ -802,7 +819,9 @@ RC SM_Manager::ModifiedColumn(const char *tbName, AttrType src_attrt, const char
     char *wpdata;
     rc = page_handle.GetData(wpdata);
     TEST_RC_NOT_ZERO_ERROR
-    auto wtbinfo = reinterpret_cast<tbinfos *>(wpdata);
+    auto wheader = reinterpret_cast<TableHeader *>(wpdata);
+    auto wtbinfo = &(wheader->tb_info);
+    //auto wtbinfo = reinterpret_cast<tbinfos *>(wpdata);
 
     //todo 此处直接置空 maybe 改进
     for (int i = 0; i < wtbinfo->columns; ++i)

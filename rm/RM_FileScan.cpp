@@ -5,8 +5,7 @@
 #include "RM_FileScan.h"
 #include "vector"
 #include "Compare.h"
-
-
+   
 int RM_FileScan::startScan(RM_FileHandle *_file_handle, vector<Condition> *_conditions) {
     file_handle = _file_handle;
     curRID.pageID = 1;   //当前的页
@@ -24,6 +23,8 @@ int RM_FileScan::getNextRecord(Record& record) {
     bool found = false;
     unsigned max_slot_id = file_handle->table_header.slot_per_page;
     unsigned map_size = file_handle->table_header.slot_map_size;
+    //debug
+    cout<<"in getNextRecord, curRID.pageID is "<<curRID.pageID<<endl;
     int rc = file_handle->pf_file_handle.GetThisPage(curRID.pageID, pageHandle);
     TEST_RC_NOT_ZERO_ERROR
     while (true) {   //per page
@@ -32,11 +33,19 @@ int RM_FileScan::getNextRecord(Record& record) {
         memcpy(bitdata, data + 8, map_size);
         bitmap = MyBitMap(map_size * 8, reinterpret_cast<unsigned *>(bitdata));
         curRID.slotID = bitmap.findLeftOne();
+        //debug
+        cout<<"curRID.slotID is "<<curRID.slotID<<endl;
         while (curRID.slotID < max_slot_id) {   //per slot
             bitmap.setBit(curRID.slotID,0);
             // 看是否符合要求
             rc = file_handle->getRecord(curRID, record);
             TEST_RC_NOT_ZERO_ERROR
+            //debug
+            cout<<"begin to satisfy "<<endl;
+            if(conditions == nullptr){
+                found = true;
+                break;
+            }
             if (satisfy(*conditions, record.data, file_handle->table_header.tb_info)) {
                 found = true;
                 break;

@@ -4,9 +4,14 @@
 
 #include "RecordManager.h"
 #include "RM_FileScan.h"
+//debug two
+#include<iostream>
+using namespace std;
 
 
 int RecordManager::createFile(const string& filename, unsigned record_size, int nullable_num) {
+    //debug
+    cout<<"create rm file, filename is"<<filename<<endl;
     // Create the file
     int rc = pf_manager.CreateFile(filename.c_str());
     TEST_RC_NOT_ZERO_ERROR
@@ -43,10 +48,14 @@ int RecordManager::createFile(const string& filename, unsigned record_size, int 
 }
 
 int RecordManager::destroyFile(const string& filename) {
+    //debug
+    cout<<"destroy rm file, filename is"<<filename<<endl;
     return pf_manager.DestroyFile(filename.c_str());
 }
 
 int RecordManager::openFile(const string& filename, RM_FileHandle &file_handle) {
+    //debug
+    cout<<"open rm file, filename is"<<filename<<endl;
     // set table header
     int rc = pf_manager.OpenFile(filename.c_str(), file_handle.pf_file_handle);
     TEST_RC_NOT_ZERO_ERROR
@@ -67,14 +76,17 @@ int RecordManager::openFile(const string& filename, RM_FileHandle &file_handle) 
 }
 
 int RecordManager::closeFile(RM_FileHandle& file_handle) {
+    //debug
+    cout<<"close file begin"<<endl;
     int rc;
     if (file_handle.table_header.is_modified) {
         PF_PageHandle page_handle;
         char *data;
         file_handle.pf_file_handle.GetFirstPage(page_handle);
         page_handle.GetData(data);
-        auto header = reinterpret_cast<TableHeader *>(data);
-        *header = file_handle.table_header;
+        //mm change to see
+        //auto header = reinterpret_cast<TableHeader *>(data);
+        //*header = file_handle.table_header;
         rc = file_handle.pf_file_handle.MarkDirty(0);
         TEST_RC_NOT_ZERO_ERROR
         rc = file_handle.pf_file_handle.UnpinPage(0);
@@ -85,6 +97,8 @@ int RecordManager::closeFile(RM_FileHandle& file_handle) {
     rc = pf_manager.CloseFile(file_handle.pf_file_handle);
     TEST_RC_NOT_ZERO_ERROR
     file_handle.is_open = false;
+    //debug
+    cout<<"close file success"<<endl;
     return 0;
 }
 

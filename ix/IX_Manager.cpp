@@ -23,6 +23,9 @@ RC IX_Manager::CreateIndex(const char* filename, int indexnum, AttrType attrType
     string str1(filename);
     string str = str1 + to_string(indexnum);
 
+    //debug
+    cout<<endl<<"create index for "<<filename<<" ;indexname is "<<str<<endl;
+
     //create indexfile and open it
     PF_FileHandle file_handle;
     PF_PageHandle page_handle;
@@ -94,10 +97,12 @@ RC IX_Manager::CreateIndex(const char* filename, int indexnum, AttrType attrType
     RecordManager::getInstance().openFile(filename, sourcefile);
     cout<<"openFile success"<<endl;
     RM_FileScan sourcescan;
-//    sourcescan.startScan(&sourcefile, nullptr, str.c_str());
-    cout<<"startScan success"<<endl;
+    sourcescan.startScan(&sourcefile, nullptr);
 
     while(!(sourcescan.getNextRecord(record))){
+        //debug
+        cout<<"record data is "<<record.data<<endl;
+        cout<<"record page_ID is "<<record.rid.pageID<<endl;
         rc = ix_indexhandle.InsertRecord(record.rid);
         TEST_RC_NOT_ZERO_ERROR
         rc = ix_indexhandle.InsertRecord(record.rid);
