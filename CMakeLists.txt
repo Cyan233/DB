@@ -12,6 +12,6 @@ add_definitions("-Wall -g")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 add_library(${CMAKE_PROJECT_NAME}_lib ${SOURCE} ${HEADERS})
-add_executable(${CMAKE_PROJECT_NAME} main.cpp)
+add_executable(${CMAKE_PROJECT_NAME} main.cpp rm/Compare.cpp rm/Compare.h)
 # target_link_libraries(${CMAKE_PROJECT_NAME} SqlParser ${CMAKE_PROJECT_NAME}_lib)
 target_link_libraries(${CMAKE_PROJECT_NAME} ${CMAKE_PROJECT_NAME}_lib)

@@ -4,10 +4,9 @@
 
 #include "iostream"
 #include "QueryManager.h"
-#include "../rm/RecordManager.h"
 #include "../rm/RM_FileScan.h"
 #include "vector"
-#include "set"
+#include "../rm/Compare.h"
 using namespace std;
 
 

@@ -6,10 +6,8 @@
 #define DB_RM_FILESCAN_H
 
 
-#include <string>
-#include "RM_FileHandle.h"
+#include "RecordManager.h"
 #include "../utils/MyBitMap.h"
-#include "struct.h"
 
 class RM_FileHandle;
 
@@ -26,4 +24,5 @@ public:
 };
 
 bool satisfy(const vector<Condition> &conditions, char* data, tbinfos tb_info);
+
 #endif //DB_RM_FILESCAN_H

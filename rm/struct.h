@@ -74,46 +74,4 @@ struct SetClause{  //比如 a = 100
 };
 
 
-template<typename T>
-bool compare(const T &a, const T &b, CompOp compOp) {
-    switch (compOp) {
-        case CompOp::EQ_OP:
-            return a == b;
-        case CompOp::GE_OP:
-            return a >= b;
-        case CompOp::GT_OP:
-            return a > b;
-        case CompOp::LE_OP:
-            return a <= b;
-        case CompOp::LT_OP:
-            return a < b;
-        case CompOp::NE_OP:
-            return a != b;
-        case CompOp::NO_OP:  // not null
-            return true;
-        case CompOp::IS_OP:  // is null
-            // todo implement this
-            break;
-        default:
-            return false;
-    }
-    return false;
-}
-
-CompOp switchLeftRight(CompOp compOp) {
-    switch (compOp) {
-        case CompOp::GE_OP:
-            return CompOp::LE_OP;
-        case CompOp::GT_OP:
-            return CompOp::LT_OP;
-        case CompOp::LE_OP:
-            return CompOp::GE_OP;
-        case CompOp::LT_OP:
-            return CompOp::GT_OP;
-            break;
-        default:
-            return compOp;
-    }
-}
-
 #endif //DB_STRUCT_H

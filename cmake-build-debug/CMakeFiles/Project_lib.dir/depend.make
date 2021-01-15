@@ -77,12 +77,19 @@ CMakeFiles/Project_lib.dir/ql/QueryManager.cpp.o: ../Constants.h
 CMakeFiles/Project_lib.dir/ql/QueryManager.cpp.o: ../pf/pf.h
 CMakeFiles/Project_lib.dir/ql/QueryManager.cpp.o: ../ql/QueryManager.cpp
 CMakeFiles/Project_lib.dir/ql/QueryManager.cpp.o: ../ql/QueryManager.h
+CMakeFiles/Project_lib.dir/ql/QueryManager.cpp.o: ../rm/Compare.h
 CMakeFiles/Project_lib.dir/ql/QueryManager.cpp.o: ../rm/RM_FileHandle.h
 CMakeFiles/Project_lib.dir/ql/QueryManager.cpp.o: ../rm/RM_FileScan.h
 CMakeFiles/Project_lib.dir/ql/QueryManager.cpp.o: ../rm/RecordManager.h
 CMakeFiles/Project_lib.dir/ql/QueryManager.cpp.o: ../rm/struct.h
 CMakeFiles/Project_lib.dir/ql/QueryManager.cpp.o: ../sm/SM_type.h
 CMakeFiles/Project_lib.dir/ql/QueryManager.cpp.o: ../utils/MyBitMap.h
+
+CMakeFiles/Project_lib.dir/rm/Compare.cpp.o: ../Constants.h
+CMakeFiles/Project_lib.dir/rm/Compare.cpp.o: ../rm/Compare.cpp
+CMakeFiles/Project_lib.dir/rm/Compare.cpp.o: ../rm/Compare.h
+CMakeFiles/Project_lib.dir/rm/Compare.cpp.o: ../rm/struct.h
+CMakeFiles/Project_lib.dir/rm/Compare.cpp.o: ../sm/SM_type.h
 
 CMakeFiles/Project_lib.dir/rm/RM_FileHandle.cpp.o: ../Constants.h
 CMakeFiles/Project_lib.dir/rm/RM_FileHandle.cpp.o: ../pf/pf.h
@@ -95,6 +102,7 @@ CMakeFiles/Project_lib.dir/rm/RM_FileHandle.cpp.o: ../utils/MyBitMap.h
 
 CMakeFiles/Project_lib.dir/rm/RM_FileScan.cpp.o: ../Constants.h
 CMakeFiles/Project_lib.dir/rm/RM_FileScan.cpp.o: ../pf/pf.h
+CMakeFiles/Project_lib.dir/rm/RM_FileScan.cpp.o: ../rm/Compare.h
 CMakeFiles/Project_lib.dir/rm/RM_FileScan.cpp.o: ../rm/RM_FileHandle.h
 CMakeFiles/Project_lib.dir/rm/RM_FileScan.cpp.o: ../rm/RM_FileScan.cpp
 CMakeFiles/Project_lib.dir/rm/RM_FileScan.cpp.o: ../rm/RM_FileScan.h

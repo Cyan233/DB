@@ -2,6 +2,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/Project_lib.dir/rm/RM_FileHandle.cpp.o"
   "CMakeFiles/Project_lib.dir/rm/RecordManager.cpp.o"
   "CMakeFiles/Project_lib.dir/rm/RM_FileScan.cpp.o"
+  "CMakeFiles/Project_lib.dir/rm/Compare.cpp.o"
   "CMakeFiles/Project_lib.dir/pf/pf_buffermgr.cc.o"
   "CMakeFiles/Project_lib.dir/pf/pf_error.cc.o"
   "CMakeFiles/Project_lib.dir/pf/pf_filehandle.cc.o"

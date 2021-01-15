@@ -460,6 +460,36 @@ ql/QueryManager.cpp.s:
 	$(MAKE) -f CMakeFiles/Project_lib.dir/build.make CMakeFiles/Project_lib.dir/ql/QueryManager.cpp.s
 .PHONY : ql/QueryManager.cpp.s
 
+rm/Compare.o: rm/Compare.cpp.o
+
+.PHONY : rm/Compare.o
+
+# target to build an object file
+rm/Compare.cpp.o:
+	$(MAKE) -f CMakeFiles/Project.dir/build.make CMakeFiles/Project.dir/rm/Compare.cpp.o
+	$(MAKE) -f CMakeFiles/Project_lib.dir/build.make CMakeFiles/Project_lib.dir/rm/Compare.cpp.o
+.PHONY : rm/Compare.cpp.o
+
+rm/Compare.i: rm/Compare.cpp.i
+
+.PHONY : rm/Compare.i
+
+# target to preprocess a source file
+rm/Compare.cpp.i:
+	$(MAKE) -f CMakeFiles/Project.dir/build.make CMakeFiles/Project.dir/rm/Compare.cpp.i
+	$(MAKE) -f CMakeFiles/Project_lib.dir/build.make CMakeFiles/Project_lib.dir/rm/Compare.cpp.i
+.PHONY : rm/Compare.cpp.i
+
+rm/Compare.s: rm/Compare.cpp.s
+
+.PHONY : rm/Compare.s
+
+# target to generate assembly for a file
+rm/Compare.cpp.s:
+	$(MAKE) -f CMakeFiles/Project.dir/build.make CMakeFiles/Project.dir/rm/Compare.cpp.s
+	$(MAKE) -f CMakeFiles/Project_lib.dir/build.make CMakeFiles/Project_lib.dir/rm/Compare.cpp.s
+.PHONY : rm/Compare.cpp.s
+
 rm/RM_FileHandle.o: rm/RM_FileHandle.cpp.o
 
 .PHONY : rm/RM_FileHandle.o
@@ -641,6 +671,9 @@ help:
 	@echo "... ql/QueryManager.o"
 	@echo "... ql/QueryManager.i"
 	@echo "... ql/QueryManager.s"
+	@echo "... rm/Compare.o"
+	@echo "... rm/Compare.i"
+	@echo "... rm/Compare.s"
 	@echo "... rm/RM_FileHandle.o"
 	@echo "... rm/RM_FileHandle.i"
 	@echo "... rm/RM_FileHandle.s"
