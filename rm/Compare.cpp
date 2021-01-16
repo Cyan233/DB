@@ -60,6 +60,10 @@ bool satisfy(const vector<Condition> &conditions, char* data, tbinfos tb_info){
                 bool ok = false;
                 switch (tb_info.colattr[i]){
                     case AttrType::DATE :
+                    case AttrType::STRING :{
+                        ok = strcmp(data+offset, condition.compare_value.s);
+                        break;
+                    }
                     case AttrType::INT :{
                         int vi = *reinterpret_cast<int *>(data+offset);
                         ok = compare(vi, condition.compare_value.i, condition.compOp);

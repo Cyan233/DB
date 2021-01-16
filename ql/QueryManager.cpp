@@ -41,7 +41,6 @@ int QueryManager::Insert(const string& tbname, const vector<vector<value>>& reco
         int offset=0;
         for (int i=0;i<rec.size();i++){
             switch (info.colattr[i]){
-                case AttrType::DATE:
                 case AttrType::INT:
                     memcpy(data+offset, &rec[i].i, sizeof(int));
                     offset+=4;
@@ -50,7 +49,8 @@ int QueryManager::Insert(const string& tbname, const vector<vector<value>>& reco
                     memcpy(data+offset, &rec[i].f, sizeof(float));
                     offset+=4;
                     break;
-                case AttrType::VARCHAR:
+                case AttrType::DATE:
+                case AttrType::STRING:
                     memcpy(data+offset, rec[i].s, info.attrsize[i]);
                     offset+=info.attrsize[i];
                     break;
@@ -90,14 +90,14 @@ int QueryManager::Update(const string& tbname, vector<Condition> &where_conditio
             for(int i=0; i<tb_info.columns; i++) {  //查找该set等式对应的列
                 if(strcmp(set_clause.attr_name, tb_info.attrname[i])==0){
                     switch (tb_info.colattr[i]){
-                        case AttrType::DATE :
                         case AttrType::INT :
                             memcpy(record.data+offset, &set_clause.set_value.i, sizeof(int));
                             break;
                         case AttrType::FLOAT :
                             memcpy(record.data+offset, &set_clause.set_value.f, sizeof(float));
                             break;
-                        case AttrType::VARCHAR :
+                        case AttrType::DATE :
+                        case AttrType::STRING :
                             memcpy(record.data+offset, &set_clause.set_value.s, tb_info.attrsize[i]);
                             break;
                     }
@@ -117,14 +117,14 @@ void printSelect(Record& record, const vector<Col>& selector, tbinfos tb_info){
         int offset = 0;
         for (int i = 0; i < tb_info.columns; i++) {  //输出需要对的列的值
                 switch (tb_info.colattr[i]) {
-                    case AttrType::DATE :
                     case AttrType::INT :
                         cout << *reinterpret_cast<int *>(record.data + offset) << ", ";
                         break;
                     case AttrType::FLOAT :
                         cout << *reinterpret_cast<float *>(record.data + offset) << ", ";
                         break;
-                    case AttrType::VARCHAR :
+                    case AttrType::DATE :
+                    case AttrType::STRING :
                         printf("%.*s\n", tb_info.attrsize[i], record.data + offset);
                         break;
             }
@@ -136,14 +136,14 @@ void printSelect(Record& record, const vector<Col>& selector, tbinfos tb_info){
         for (int i = 0; i < tb_info.columns; i++) {  //输出需要对的列的值
             if (strcmp(select.attr_name, tb_info.attrname[i]) == 0) {
                 switch (tb_info.colattr[i]) {
-                    case AttrType::DATE :
                     case AttrType::INT :
                         cout << *reinterpret_cast<int *>(record.data + offset) << ", ";
                         break;
                     case AttrType::FLOAT :
                         cout << *reinterpret_cast<float *>(record.data + offset) << ", ";
                         break;
-                    case AttrType::VARCHAR :
+                    case AttrType::DATE :
+                    case AttrType::STRING :
                         printf("%.*s\n", tb_info.attrsize[i], record.data + offset);
                         break;
                 }
@@ -181,14 +181,14 @@ int jointSelect(int level, vector<Record> path, const vector<Condition_joint> &c
                 for (int i = 0; i < tbinfos[level].columns; i++) {  // 找到需要替换的值
                     if (strcmp(condition.cols[match].attr_name, tbinfos[level].attrname[i]) == 0) {
                         switch (tbinfos[level].colattr[i]) {
-                            case AttrType::DATE :
                             case AttrType::INT :
                                 new_codition.compare_value.i = *reinterpret_cast<int *>(record.data + offset);
                                 break;
                             case AttrType::FLOAT :
                                 new_codition.compare_value.f = *reinterpret_cast<float *>(record.data + offset);
                                 break;
-                            case AttrType::VARCHAR :
+                            case AttrType::DATE :
+                            case AttrType::STRING :
                                 new_codition.compare_value.s = record.data + offset;
                                 break;
                         }
@@ -256,6 +256,6 @@ int QueryManager::Select(vector<char*>& tbnames, vector<vector<Col>>& selector, 
     }
     // 对于每个多表条件，递归查找
     vector<Record> path;
-    jointSelect(tbnames.size(), path, conditions_joint, records, selector, tb_info, tbnames);
+//    jointSelect(tbnames.size(), path, conditions_joint, records, selector, tb_info, tbnames);
     return 0;
 }
