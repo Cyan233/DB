@@ -52,12 +52,14 @@ int main() {
     SM_Manager::GetInstance().DropTable("ddddddd");
     SM_Manager::GetInstance().ShowTb();
     SM_Manager::GetInstance().CreatePK("aaaaaaa", 10);
-    SM_Manager::GetInstance().DropPK("aaaaaaa");
+    //SM_Manager::GetInstance().DropPK("aaaaaaa");
     SM_Manager::GetInstance().CreateFK("aaaaaaa", 10, "ddddddd");
     SM_Manager::GetInstance().DropFK("aaaaaaa", 10, "ddddddd");
     SM_Manager::GetInstance().AddColumn("aaaaaaa", AttrType::INT, "id", 10, true, 10);
-    SM_Manager::GetInstance().DropColumn("aaaaaaa", AttrType::INT, "id");
+    SM_Manager::GetInstance().Descv("aaaaaaa"); 
+    //SM_Manager::GetInstance().DropColumn("aaaaaaa", AttrType::INT, "id");
     SM_Manager::GetInstance().ModifiedColumn("aaaaaaa", AttrType::INT, "id", AttrType::INT, "ie", 10, true, 10);
+    SM_Manager::GetInstance().Descv("aaaaaaa"); 
     SM_Manager::GetInstance().CheckoutDb();
 
     //debug

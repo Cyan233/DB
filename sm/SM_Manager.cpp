@@ -373,7 +373,48 @@ RC SM_Manager::DropTable(const char *tbName)
     TEST_RC_NOT_ZERO_ERROR
     //rc = pf_manager.DestroyFile(str.c_str());
     //TEST_RC_NOT_ZERO_ERROR
-    cout << "drop table " << tbName << " success" << endl;
+
+    PF_FileHandle pf_filehandle;
+    rc = pf_manager.OpenFile("whole_table_info", pf_filehandle);
+    TEST_RC_NOT_ZERO_ERROR
+    cout << "open whole_table_info success" << endl;
+    char *wpdata;
+    PF_PageHandle wpage1;
+    rc = pf_filehandle.GetFirstPage(wpage1);
+    TEST_RC_NOT_ZERO_ERROR
+    PageNum paa;
+    wpage1.GetPageNum(paa);
+    cout << "page num is " << paa << endl;
+    wpage1.GetData(wpdata);
+    cout << "wpdata:" << wpdata << endl;
+    cout << "file whole_table_info:" << endl;
+
+    auto offsetptr = reinterpret_cast<int *>(wpdata);
+    int offset = *offsetptr;
+    if (offset == 0)
+    {
+        cout << "clean tableinfo failed" << endl;
+        return 0;
+    }
+    auto wtbinfo = reinterpret_cast<whole_tbinfos *>(wpdata + 4);
+    int counti = 0;
+    while (counti < offset)
+    {
+        if(strncmp(wtbinfo->tbname, tbName, wtbinfo->strsize) == 0){
+            wtbinfo->strsize = -1;
+            cout<<"clean tableinfo success"<<endl;
+            return 0;
+        }
+        counti++;
+        wtbinfo++;
+    }
+    cout << "clean tableinfo failed" << endl;
+    rc = pf_filehandle.UnpinPage(paa);
+    TEST_RC_NOT_ZERO_ERROR
+    cout << "Unpinpage pa success" << endl;
+    rc = pf_manager.CloseFile(pf_filehandle);
+    cout << "close file success" << endl;
+    TEST_RC_NOT_ZERO_ERROR
     return 0;
 }
 
@@ -416,6 +457,40 @@ RC SM_Manager::InitTbInfo()
     TEST_RC_NOT_ZERO_ERROR
 
     cout << "init whole_table_info file success" << endl
+         << endl;
+    return 0;
+}
+
+RC SM_Manager::Descv(const char *tbName){
+    RC rc;
+    PF_Manager pf_manager;
+    PF_FileHandle file_handle;
+    PF_PageHandle page_handle;
+    rc = pf_manager.OpenFile(tbName, file_handle);
+    cout << "Open file success" << endl;
+    TEST_RC_NOT_ZERO_ERROR
+
+    rc = file_handle.GetFirstPage(page_handle);
+    TEST_RC_NOT_ZERO_ERROR
+
+    cout << "show data in tbinfo" << endl;
+    char *wpdata;
+    rc = page_handle.GetData(wpdata);
+    TEST_RC_NOT_ZERO_ERROR
+    //cout << "no zero error after write data in tbinfo" << endl;
+    auto wheader = reinterpret_cast<TableHeader *>(wpdata);
+    auto wtbinfo = &(wheader->tb_info);
+
+    cout<<"table name is "<<wtbinfo->tbname<<endl<<endl;
+    cout<<"attrname is "<<wtbinfo->attrname[0]<<" attrsize is "<<wtbinfo->attrsize[0]<<endl;
+    cout<<"has pkey? "<<wtbinfo->has_pkey<<endl;
+    
+    rc = file_handle.UnpinPage(0);
+    TEST_RC_NOT_ZERO_ERROR
+    cout << "UnpinPage page 0 success" << endl;
+    rc = pf_manager.CloseFile(file_handle);
+    TEST_RC_NOT_ZERO_ERROR
+    cout << "show table info success" << endl
          << endl;
     return 0;
 }
