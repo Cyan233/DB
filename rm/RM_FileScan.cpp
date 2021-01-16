@@ -30,8 +30,13 @@ int RM_FileScan::getNextRecord(Record& record) {
     while (true) {   //per page
         rc = pageHandle.GetData(data);
         TEST_RC_NOT_ZERO_ERROR
-        memcpy(bitdata, data + 8, map_size);
-        bitmap = MyBitMap(map_size * 8, reinterpret_cast<unsigned *>(bitdata));
+        if(curRID.slotID==0){  // 否则延续之前的
+            memcpy(bitdata, data + 8, map_size);
+            for (int i = 0; i < file_handle->table_header.slot_map_size; ++i) {
+                bitdata[i] = ~bitdata[i];
+            }
+            bitmap = MyBitMap(map_size * 8, reinterpret_cast<unsigned *>(bitdata));
+        }
         curRID.slotID = bitmap.findLeftOne();
         //debug
         cout<<"curRID.slotID is "<<curRID.slotID<<endl;
@@ -42,8 +47,9 @@ int RM_FileScan::getNextRecord(Record& record) {
             TEST_RC_NOT_ZERO_ERROR
             //debug
             cout<<"begin to satisfy "<<endl;
-            if(conditions == nullptr){
+            if(conditions->empty()){
                 found = true;
+                cout<<"find"<<endl;
                 break;
             }
             if (satisfy(*conditions, record.data, file_handle->table_header.tb_info)) {
@@ -61,5 +67,6 @@ int RM_FileScan::getNextRecord(Record& record) {
         TEST_RC_NOT_ZERO_ERROR
         curRID.slotID = 0;
     }
+    curRID.slotID++;
     return 0;
 }

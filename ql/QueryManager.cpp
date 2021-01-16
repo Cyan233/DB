@@ -10,31 +10,30 @@
 using namespace std;
 
 
-int get_infos(const string& tbname, tbinfos& info){
-    PF_FileHandle info_file_handle;
-    PF_Manager pf_manager;
-    PF_PageHandle page_handle;
-    string str = tbname + "_tableinfo";
-    int rc = pf_manager.OpenFile(str.c_str(), info_file_handle);
-    TEST_RC_NOT_ZERO_ERROR
-    rc = info_file_handle.GetFirstPage(page_handle);
-    TEST_RC_NOT_ZERO_ERROR
-    PageNum page1;
-    page_handle.GetPageNum(page1);
-    TEST_RC_NOT_ZERO_ERROR
-    char *wpdata;
-    rc = page_handle.GetData(wpdata);
-    TEST_RC_NOT_ZERO_ERROR
-    info = *reinterpret_cast<tbinfos *>(wpdata);
-}
+//int get_infos(const string& tbname, tbinfos& info){
+//    PF_FileHandle info_file_handle;
+//    PF_Manager pf_manager;
+//    PF_PageHandle page_handle;
+//    string str = tbname + "_tableinfo";
+//    int rc = pf_manager.OpenFile(str.c_str(), info_file_handle);
+//    TEST_RC_NOT_ZERO_ERROR
+//    rc = info_file_handle.GetFirstPage(page_handle);
+//    TEST_RC_NOT_ZERO_ERROR
+//    PageNum page1;
+//    page_handle.GetPageNum(page1);
+//    TEST_RC_NOT_ZERO_ERROR
+//    char *wpdata;
+//    rc = page_handle.GetData(wpdata);
+//    TEST_RC_NOT_ZERO_ERROR
+//    info = *reinterpret_cast<tbinfos *>(wpdata);
+//}
 
 
 int QueryManager::Insert(const string& tbname, const vector<vector<value>>& records){
     RM_FileHandle file_handle;
     int rc = RecordManager::getInstance().openFile(tbname, file_handle);
     TEST_RC_NOT_ZERO_ERROR
-    tbinfos info;
-    rc = get_infos(tbname, info);
+    tbinfos info = file_handle.getHeader().tb_info;
     TEST_RC_NOT_ZERO_ERROR
     RID rid;
     for (auto &rec: records) {
@@ -66,8 +65,7 @@ int QueryManager::Delete(const string& tbname, vector<Condition> &where_conditio
     RM_FileHandle file_handle;
     int rc = RecordManager::getInstance().openFile(tbname, file_handle);
     TEST_RC_NOT_ZERO_ERROR
-    tbinfos info;
-    get_infos(tbname, info);
+    tbinfos info = file_handle.getHeader().tb_info;
     Record record;
     RM_FileScan scan;
     scan.startScan(&file_handle, &where_conditions);
@@ -82,8 +80,7 @@ int QueryManager::Update(const string& tbname, vector<Condition> &where_conditio
     RM_FileHandle file_handle;
     int rc = RecordManager::getInstance().openFile(tbname, file_handle);
     TEST_RC_NOT_ZERO_ERROR
-    tbinfos tb_info;
-    get_infos(tbname, tb_info);
+    tbinfos tb_info = file_handle.getHeader().tb_info;
     Record record;
     RM_FileScan scan;
     scan.startScan(&file_handle, &where_conditions);
@@ -116,6 +113,24 @@ int QueryManager::Update(const string& tbname, vector<Condition> &where_conditio
 }
 
 void printSelect(Record& record, const vector<Col>& selector, tbinfos tb_info){
+    if(selector.empty()){
+        int offset = 0;
+        for (int i = 0; i < tb_info.columns; i++) {  //输出需要对的列的值
+                switch (tb_info.colattr[i]) {
+                    case AttrType::DATE :
+                    case AttrType::INT :
+                        cout << *reinterpret_cast<int *>(record.data + offset) << ", ";
+                        break;
+                    case AttrType::FLOAT :
+                        cout << *reinterpret_cast<float *>(record.data + offset) << ", ";
+                        break;
+                    case AttrType::VARCHAR :
+                        printf("%.*s\n", tb_info.attrsize[i], record.data + offset);
+                        break;
+            }
+            offset += tb_info.attrsize[i];
+        }
+    }
     for (auto &select:selector) {
         int offset = 0;
         for (int i = 0; i < tb_info.columns; i++) {  //输出需要对的列的值
@@ -220,11 +235,15 @@ int QueryManager::Select(vector<char*>& tbnames, vector<vector<Col>>& selector, 
     }
     Record record;
     RM_FileScan scan;
-    // 1.如果只有单表条件conditions，说明只有一个数据表
-    scan.startScan(&file_handle[0], &conditions[0]);
-    while (scan.getNextRecord(record) == 0) {  //找得到记录，更改其值
-        printSelect(record, selector[0], tb_info[0]);
-        cout<<endl;
+    // 1.如果只有一个数据表
+    if (tbnames.size()==1){
+        scan.startScan(&file_handle[0], &conditions[0]);
+        cout<<"number of conditions is "<<conditions[0].size()<<endl;
+        while (scan.getNextRecord(record) == 0) {  //找得到记录，更改其值
+            printSelect(record, selector[0], tb_info[0]);
+            cout<<endl;
+        }
+        return 0;
     }
     // 2.存在多表联合的条件
     auto* records = new vector<Record>[tbnames.size()];

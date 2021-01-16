@@ -10,17 +10,43 @@
 string
 -
 
+/Users/cyan/Desktop/2020autumn/数据库/DB/ix/IX_IndexHandle.h
+../rm/struct.h
+/Users/cyan/Desktop/2020autumn/数据库/DB/rm/struct.h
+../pf/pf.h
+/Users/cyan/Desktop/2020autumn/数据库/DB/pf/pf.h
+
+/Users/cyan/Desktop/2020autumn/数据库/DB/ix/IX_Manager.h
+../pf/pf.h
+/Users/cyan/Desktop/2020autumn/数据库/DB/pf/pf.h
+IX_IndexHandle.h
+/Users/cyan/Desktop/2020autumn/数据库/DB/ix/IX_IndexHandle.h
+
 /Users/cyan/Desktop/2020autumn/数据库/DB/main.cpp
 iostream
 -
 rm/RecordManager.h
 /Users/cyan/Desktop/2020autumn/数据库/DB/rm/RecordManager.h
+rm/RM_FileHandle.h
+/Users/cyan/Desktop/2020autumn/数据库/DB/rm/RM_FileHandle.h
 utils/MyBitMap.h
 /Users/cyan/Desktop/2020autumn/数据库/DB/utils/MyBitMap.h
+ix/IX_Manager.h
+/Users/cyan/Desktop/2020autumn/数据库/DB/ix/IX_Manager.h
+sm/SM_Manager.h
+/Users/cyan/Desktop/2020autumn/数据库/DB/sm/SM_Manager.h
+ql/QueryManager.h
+/Users/cyan/Desktop/2020autumn/数据库/DB/ql/QueryManager.h
 
 /Users/cyan/Desktop/2020autumn/数据库/DB/pf/pf.h
 ../Constants.h
 /Users/cyan/Desktop/2020autumn/数据库/DB/Constants.h
+
+/Users/cyan/Desktop/2020autumn/数据库/DB/ql/QueryManager.h
+../sm/SM_type.h
+/Users/cyan/Desktop/2020autumn/数据库/DB/sm/SM_type.h
+../rm/struct.h
+/Users/cyan/Desktop/2020autumn/数据库/DB/rm/struct.h
 
 /Users/cyan/Desktop/2020autumn/数据库/DB/rm/RM_FileHandle.h
 ../pf/pf.h
@@ -40,6 +66,18 @@ cstring
 cstdio
 -
 ../sm/SM_type.h
+/Users/cyan/Desktop/2020autumn/数据库/DB/sm/SM_type.h
+vector
+-
+
+/Users/cyan/Desktop/2020autumn/数据库/DB/sm/SM_Manager.h
+../Constants.h
+/Users/cyan/Desktop/2020autumn/数据库/DB/Constants.h
+../rm/RecordManager.h
+/Users/cyan/Desktop/2020autumn/数据库/DB/rm/RecordManager.h
+../ix/IX_Manager.h
+/Users/cyan/Desktop/2020autumn/数据库/DB/ix/IX_Manager.h
+SM_type.h
 /Users/cyan/Desktop/2020autumn/数据库/DB/sm/SM_type.h
 
 /Users/cyan/Desktop/2020autumn/数据库/DB/sm/SM_type.h

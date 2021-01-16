@@ -3,6 +3,7 @@
 //
 
 #include "Compare.h"
+#include "iostream"
 
 template<typename T>
 bool compare(const T &a, const T &b, CompOp compOp) {
@@ -48,8 +49,10 @@ CompOp switchLeftRight(CompOp compOp) {
 
 
 bool satisfy(const vector<Condition> &conditions, char* data, tbinfos tb_info){
-    if(conditions.empty())
+    if(conditions.empty()){
+        cout<<"condition is empty";
         return true;
+    }
     for(auto &condition: conditions){ //对于每一个条件，都要满足
         int offset = 0;
         for(int i=0; i<tb_info.columns; i++) {  //查找该条件对应的列
