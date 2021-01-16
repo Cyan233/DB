@@ -24,7 +24,7 @@ int RM_FileScan::getNextRecord(Record& record) {
     unsigned max_slot_id = file_handle->table_header.slot_per_page;
     unsigned map_size = file_handle->table_header.slot_map_size;
     //debug
-    cout<<"in getNextRecord, curRID.pageID is "<<curRID.pageID<<endl;
+    //cout<<"in getNextRecord, curRID.pageID is "<<curRID.pageID<<endl;
     int rc = file_handle->pf_file_handle.GetThisPage(curRID.pageID, pageHandle);
     TEST_RC_NOT_ZERO_ERROR
     while (true) {   //per page
@@ -34,7 +34,7 @@ int RM_FileScan::getNextRecord(Record& record) {
         bitmap = MyBitMap(map_size * 8, reinterpret_cast<unsigned *>(bitdata));
         curRID.slotID = bitmap.findLeftOne();
         //debug
-        cout<<"curRID.slotID is "<<curRID.slotID<<endl;
+        //cout<<"curRID.slotID is "<<curRID.slotID<<endl;
         while (curRID.slotID < max_slot_id) {   //per slot
             bitmap.setBit(curRID.slotID,0);
             // 看是否符合要求

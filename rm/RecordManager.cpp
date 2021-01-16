@@ -5,7 +5,6 @@
 #include "RecordManager.h"
 #include "RM_FileScan.h"
 //debug two
-#include<iostream>
 using namespace std;
 
 
@@ -47,11 +46,6 @@ int RecordManager::createFile(const string& filename, unsigned record_size, int 
     return 0;
 }
 
-int RecordManager::destroyFile(const string& filename) {
-    //debug
-    cout<<"destroy rm file, filename is"<<filename<<endl;
-    return pf_manager.DestroyFile(filename.c_str());
-}
 
 int RecordManager::openFile(const string& filename, RM_FileHandle &file_handle) {
     //debug
@@ -61,9 +55,11 @@ int RecordManager::openFile(const string& filename, RM_FileHandle &file_handle) 
     TEST_RC_NOT_ZERO_ERROR
 
     PF_PageHandle page_handle;
-    file_handle.pf_file_handle.GetFirstPage(page_handle);
+    rc = file_handle.pf_file_handle.GetFirstPage(page_handle);
+    TEST_RC_NOT_ZERO_ERROR
     char *data;
-    page_handle.GetData(data);
+    rc = page_handle.GetData(data);
+    TEST_RC_NOT_ZERO_ERROR
     auto header = reinterpret_cast<TableHeader *>(data);
     file_handle.table_header = *header;
     //** file_handle.table_header.is_modified = false;
@@ -77,7 +73,7 @@ int RecordManager::openFile(const string& filename, RM_FileHandle &file_handle) 
 
 int RecordManager::closeFile(RM_FileHandle& file_handle) {
     //debug
-    cout<<"close file begin"<<endl;
+    //cout<<"close file begin"<<endl;
     int rc;
     if (file_handle.table_header.is_modified) {
         PF_PageHandle page_handle;
@@ -100,10 +96,4 @@ int RecordManager::closeFile(RM_FileHandle& file_handle) {
     //debug
     cout<<"close file success"<<endl;
     return 0;
-}
-
-
-RecordManager& RecordManager:: getInstance() {
-    static RecordManager instance;
-    return instance;
 }

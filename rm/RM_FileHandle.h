@@ -15,7 +15,9 @@ class RM_FileHandle {
     PF_FileHandle pf_file_handle;
 
     int insertPage();
-    unsigned getOffset(unsigned slot_num) const;
+    unsigned getOffset(unsigned slot_num) const {
+        return 8 + table_header.slot_map_size + slot_num * table_header.record_size;  //单位都是byte
+    }
 public:
     bool is_open = false;
     friend class RecordManager;

@@ -10,6 +10,7 @@ using namespace std;
 
 
 class QueryManager {
+public:
     int Select(vector<char*>& tbnames, vector<vector<Col>>& selector,
             vector<Condition_joint> &conditions_joint, vector<vector<Condition>> &conditions);
 

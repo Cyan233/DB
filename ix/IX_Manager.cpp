@@ -30,20 +30,20 @@ RC IX_Manager::CreateIndex(const char* filename, int indexnum, AttrType attrType
     PF_FileHandle file_handle;
     PF_PageHandle page_handle;
     int rc = pf_manager.CreateFile(str.c_str());
-    cout<<"Create file success"<<endl;
+    //cout<<"Create file success"<<endl;
     TEST_RC_NOT_ZERO_ERROR
     rc = pf_manager.OpenFile(str.c_str(), file_handle);
-    cout<<"Open file success"<<endl;
+    //cout<<"Open file success"<<endl;
     TEST_RC_NOT_ZERO_ERROR
     rc = file_handle.AllocatePage(page_handle);
-    cout<<"AllocatePage 1 success"<<endl;
+    //cout<<"AllocatePage 1 success"<<endl;
     PageNum page1;
     page_handle.GetPageNum(page1);
-    cout<<"page number is:"<<page1;
+    //cout<<"page number is:"<<page1;
     TEST_RC_NOT_ZERO_ERROR
     char *data;
     page_handle.GetData(data);
-    cout<<"GetData success"<<endl;
+    //cout<<"GetData success"<<endl;
 
     //set the first page
     auto header = reinterpret_cast<IX_IndexHeader *>(data);
@@ -55,15 +55,15 @@ RC IX_Manager::CreateIndex(const char* filename, int indexnum, AttrType attrType
 
     //allocate page 2 as a internal node page
     rc = file_handle.AllocatePage(page_handle);
-    cout<<"AllocatePage 2 success"<<endl;
+    //cout<<"AllocatePage 2 success"<<endl;
     PageNum page2;
     page_handle.GetPageNum(page2);
-    cout<<"page number is:"<<page2;
+    //cout<<"page number is:"<<page2;
     TEST_RC_NOT_ZERO_ERROR
     header->rNpN = page2;
     header->pagenums = 2;
     //page_handle.GetData(data);
-    //cout<<"GetData success"<<endl;
+    ////cout<<"GetData success"<<endl;
     //auto nodet = reinterpret_cast<nodetype *>(data);
     //nodet->nodet = -1;
     //auto rootnode = reinterpret_cast<internode *>(data + 4);
@@ -72,15 +72,15 @@ RC IX_Manager::CreateIndex(const char* filename, int indexnum, AttrType attrType
     //write back
     rc = file_handle.MarkDirty(0);
     TEST_RC_NOT_ZERO_ERROR
-    cout<<"MarkDirty page 1 success"<<endl;
+    //cout<<"MarkDirty page 1 success"<<endl;
     rc = file_handle.UnpinPage(0);
     TEST_RC_NOT_ZERO_ERROR
-    cout<<"UnpinPage page 1 success"<<endl;
+    //cout<<"UnpinPage page 1 success"<<endl;
     rc = file_handle.MarkDirty(1);
     TEST_RC_NOT_ZERO_ERROR
-    cout<<"MarkDirty page 2 success"<<endl;
+    //cout<<"MarkDirty page 2 success"<<endl;
     rc = file_handle.UnpinPage(1);
-    cout<<"UnpinPage page 2 success"<<endl;
+    //cout<<"UnpinPage page 2 success"<<endl;
     TEST_RC_NOT_ZERO_ERROR
 
     //insert all the indexs 调用insertIndex接口
@@ -95,14 +95,14 @@ RC IX_Manager::CreateIndex(const char* filename, int indexnum, AttrType attrType
     Record record;
     RM_FileHandle sourcefile;
     RecordManager::getInstance().openFile(filename, sourcefile);
-    cout<<"openFile success"<<endl;
+    //cout<<"openFile success"<<endl;
     RM_FileScan sourcescan;
     sourcescan.startScan(&sourcefile, nullptr);
 
     while(!(sourcescan.getNextRecord(record))){
         //debug
-        cout<<"record data is "<<record.data<<endl;
-        cout<<"record page_ID is "<<record.rid.pageID<<endl;
+        //cout<<"record data is "<<record.data<<endl;
+        //cout<<"record page_ID is "<<record.rid.pageID<<endl;
         rc = ix_indexhandle.InsertRecord(record.rid);
         TEST_RC_NOT_ZERO_ERROR
         rc = ix_indexhandle.InsertRecord(record.rid);
@@ -113,19 +113,19 @@ RC IX_Manager::CreateIndex(const char* filename, int indexnum, AttrType attrType
         TEST_RC_NOT_ZERO_ERROR
         rc = ix_indexhandle.InsertRecord(record.rid);
         TEST_RC_NOT_ZERO_ERROR
-        cout<<"record geted. record.data is"<<record.data<<endl;
-        cout<<"InsertRecord success"<<endl;
+        //cout<<"record geted. record.data is"<<record.data<<endl;
+        //cout<<"InsertRecord success"<<endl;
         break;
     }
-    cout<<"Insert record completely."<<endl;
+    //cout<<"Insert record completely."<<endl;
 
     //close indexfile and close sourcefile
     //rc = file_handle.ForcePages();
     rc = pf_manager.CloseFile(file_handle);
-    cout<<"CloseFile success"<<endl;
+    //cout<<"CloseFile success"<<endl;
     TEST_RC_NOT_ZERO_ERROR
     rc = RecordManager::getInstance().closeFile(sourcefile);
-    cout<<"closeFile success"<<endl;
+    //cout<<"closeFile success"<<endl;
     TEST_RC_NOT_ZERO_ERROR
     return 0;
 }
@@ -135,47 +135,47 @@ RC IX_Manager::DestroyIndex(const char* filename, int indexnum){
     string str1(filename);
     string str = str1 + to_string(indexnum);
     rc = pf_manager.DestroyFile(str.c_str());
-    cout<<"DestroyFile success"<<endl;
+    cout<<"Destroy index File success"<<endl;
     TEST_RC_NOT_ZERO_ERROR
     return 0;
 }
 
 RC IX_Manager::OpenIndex(const char* filename, int indexnum, IX_indexHandle& ix_indexhandle){
     RC rc;
-    cout<<"in IX:OpenIndex"<<endl;
+    //cout<<"in IX:OpenIndex"<<endl;
     string str1(filename);
     string str = str1 + to_string(indexnum);
     PF_FileHandle pf_fileh;
     rc = pf_manager.OpenFile(str.c_str(), pf_fileh);
-    cout<<"Open Indexfile success"<<endl;
+    cout<<"Open Index file success"<<endl;
     PF_PageHandle pageh;
     pf_fileh.GetFirstPage(pageh);
     char* pdata;
     pageh.GetData(pdata);
     auto tableheader = reinterpret_cast<IX_IndexHeader *>(pdata);
-    cout<<"tableheader->filename is "<<tableheader->filename;
-    //cout<<"tableheader->attrType is "<<tableheader->attrType;
-    cout<<"tableheader->attrLength is "<<tableheader->attrLength;
-    cout<<"tableheader->rNpN is "<<tableheader->rNpN;
+    //cout<<"tableheader->filename is "<<tableheader->filename;
+    ////cout<<"tableheader->attrType is "<<tableheader->attrType;
+    //cout<<"tableheader->attrLength is "<<tableheader->attrLength;
+    //cout<<"tableheader->rNpN is "<<tableheader->rNpN;
     ix_indexhandle.rootpage = tableheader->rNpN;
     ix_indexhandle.pagenums = tableheader->pagenums;
     if(tableheader->is_new == true){
         ix_indexhandle.fisnew = true;
     }
-    cout<<"tableheader->offset is "<<tableheader->offset;
+    //cout<<"tableheader->offset is "<<tableheader->offset;
     pf_fileh.UnpinPage(0);
     ix_indexhandle.pf_filehandle = pf_fileh;
 }
 
 RC IX_Manager::CloseIndex(IX_indexHandle& ix_indexhandle){
     RC rc;
-    cout<<"in IX:Close Index"<<endl;
+    //cout<<"in IX:Close Index"<<endl;
     //!!!!!!Unpinpage 0
     //rc = ix_indexhandle.pf_filehandle.UnpinPage(0);
     //TEST_RC_NOT_ZERO_ERROR
     rc = pf_manager.CloseFile(ix_indexhandle.pf_filehandle);
-    cout<<"close file success"<<endl;
-    cout<<"end in CloseIndex"<<endl<<endl;
+    cout<<"close index file success"<<endl;
+    //cout<<"end in CloseIndex"<<endl<<endl;
     TEST_RC_NOT_ZERO_ERROR
     return 0;
 }
