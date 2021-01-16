@@ -39,38 +39,38 @@ RC SM_Manager::CreateDb(const char *dbName)
 #endif
     if (rc != 0)
     {
-        cout << "mkdir false" << endl;
+        //cout << "mkdir false" << endl;
         return rc;
     }
-    cout << "create database correctly" << endl;
+    //cout << "create database correctly" << endl;
 
     //Create Database info file
     chdir(dbName);
     PF_FileHandle file_handle;
     PF_PageHandle page_handle;
     PF_Manager pf_manager;
-    /*cout<<"create database info file"<<endl;  
+    /*//cout<<"create database info file"<<endl;  
     rc = pf_manager.CreateFile("dbinfo");
-    cout<<"Create dbinfo success"<<endl;
+    //cout<<"Create dbinfo success"<<endl;
     TEST_RC_NOT_ZERO_ERROR
     rc = pf_manager.OpenFile("dbinfo", file_handle);
-    cout<<"Open dbinfo success"<<endl;
+    //cout<<"Open dbinfo success"<<endl;
     TEST_RC_NOT_ZERO_ERROR
 
     rc = file_handle.AllocatePage(page_handle);
-    cout<<"AllocatePage 1 for dbinfo success"<<endl;
+    //cout<<"AllocatePage 1 for dbinfo success"<<endl;
     PageNum page1;
     page_handle.GetPageNum(page1);
-    cout<<"page number is:"<<page1;
+    //cout<<"page number is:"<<page1;
     TEST_RC_NOT_ZERO_ERROR
     
     //write back
     rc = file_handle.MarkDirty(page1);
     TEST_RC_NOT_ZERO_ERROR
-    cout<<"MarkDirty page 1 success"<<endl;
+    //cout<<"MarkDirty page 1 success"<<endl;
     rc = file_handle.UnpinPage(page1);
     TEST_RC_NOT_ZERO_ERROR
-    cout<<"UnpinPage page 1 success"<<endl;
+    //cout<<"UnpinPage page 1 success"<<endl;
     rc = pf_manager.CloseFile(file_handle);*/
 
     //add info in dbinfo
@@ -78,7 +78,7 @@ RC SM_Manager::CreateDb(const char *dbName)
     PF_FileHandle pf_filehandle;
     rc = pf_manager.OpenFile("dbinfo", pf_filehandle);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "open whole dbinfo success" << endl;
+    //cout << "open whole dbinfo success" << endl;
     char *wpdata;
     PF_PageHandle wpage1;
     pf_filehandle.GetFirstPage(wpage1);
@@ -86,7 +86,7 @@ RC SM_Manager::CreateDb(const char *dbName)
     wpage1.GetPageNum(paa);
     wpage1.GetData(wpdata);
     auto offsetptr = reinterpret_cast<int *>(wpdata);
-    cout << "write file dbinfo:" << endl;
+    //cout << "write file dbinfo:" << endl;
     auto wdbinfo = reinterpret_cast<dbinfos *>(wpdata + 4);
     wdbinfo = wdbinfo + (*offsetptr);
     wdbinfo->strsize = strlen(dbName);
@@ -96,7 +96,7 @@ RC SM_Manager::CreateDb(const char *dbName)
     pf_filehandle.UnpinPage(paa);
     rc = pf_manager.CloseFile(pf_filehandle);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "write dbinfo success" << endl;
+    //cout << "write dbinfo success" << endl;
     //todo maybe the space is not enough,allocate more pages
 
     return 0;
@@ -116,7 +116,7 @@ RC SM_Manager::DropDb(const char *dbName)
     PF_Manager pf_manager;
     rc = pf_manager.OpenFile("dbinfo", pf_filehandle);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "open dbinfo success" << endl;
+    //cout << "open dbinfo success" << endl;
     char *wpdata;
     PF_PageHandle wpage1;
     pf_filehandle.GetFirstPage(wpage1);
@@ -124,7 +124,7 @@ RC SM_Manager::DropDb(const char *dbName)
     auto offsetptr = reinterpret_cast<int *>(wpdata);
     int offset = *offsetptr;
     auto wdbinfo = reinterpret_cast<dbinfos *>(wpdata + 4);
-    cout << "modify file dbinfo:" << endl;
+    //cout << "modify file dbinfo:" << endl;
     int counti = 0;
     while (counti < offset - 1)
     {
@@ -146,13 +146,13 @@ RC SM_Manager::DropDb(const char *dbName)
     wpage1.GetPageNum(paa);
     rc = pf_filehandle.MarkDirty(paa);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "MarkDirty page success" << endl;
+    //cout << "MarkDirty page success" << endl;
     rc = pf_filehandle.UnpinPage(paa);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "UnpinPage page success" << endl;
+    //cout << "UnpinPage page success" << endl;
     rc = pf_manager.CloseFile(pf_filehandle);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "dropDb " << dbName << " success" << endl;
+    //cout << "dropDb " << dbName << " success" << endl;
     return system(str);
 }
 
@@ -160,7 +160,7 @@ RC SM_Manager::UseDb(const char *dbName)
 {
     RC rc;
     rc = chdir(dbName);
-    cout << "chdir in " << dbName << endl;
+    //cout << "chdir in " << dbName << endl;
     return rc;
 }
 
@@ -174,38 +174,38 @@ RC SM_Manager::CheckoutDb()
 RC SM_Manager::initDbInfo()
 {
     //Create Database info file
-    cout << "create database info file" << endl;
+    //cout << "create database info file" << endl;
     RC rc;
     PF_FileHandle file_handle;
     PF_PageHandle page_handle;
     PF_Manager pf_manager;
     rc = pf_manager.CreateFile("dbinfo");
-    cout << "Create file success" << endl;
+    //cout << "Create file success" << endl;
     TEST_RC_NOT_ZERO_ERROR
     rc = pf_manager.OpenFile("dbinfo", file_handle);
-    cout << "Open file success" << endl;
+    //cout << "Open file success" << endl;
     TEST_RC_NOT_ZERO_ERROR
 
     rc = file_handle.AllocatePage(page_handle);
-    cout << "AllocatePage 1 success" << endl;
+    //cout << "AllocatePage 1 success" << endl;
     PageNum page1;
     page_handle.GetPageNum(page1);
-    cout << "page number is:" << page1;
+    //cout << "page number is:" << page1;
     TEST_RC_NOT_ZERO_ERROR
 
     char *wpdata;
     page_handle.GetData(wpdata);
     auto offsetptr = reinterpret_cast<int *>(wpdata);
     *offsetptr = 0;
-    cout << "init offset success" << endl;
+    //cout << "init offset success" << endl;
 
     //write back
     rc = file_handle.MarkDirty(page1);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "MarkDirty page 1 success" << endl;
+    //cout << "MarkDirty page 1 success" << endl;
     rc = file_handle.UnpinPage(page1);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "UnpinPage page 1 success" << endl;
+    //cout << "UnpinPage page 1 success" << endl;
     rc = pf_manager.CloseFile(file_handle);
     TEST_RC_NOT_ZERO_ERROR
 }
@@ -217,23 +217,25 @@ RC SM_Manager::ShowDb()
     PF_FileHandle pf_filehandle;
     rc = pf_manager.OpenFile("dbinfo", pf_filehandle);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "open dbinfo success" << endl;
+    //cout << "open dbinfo success" << endl;
     char *wpdata;
     PF_PageHandle wpage1;
     rc = pf_filehandle.GetFirstPage(wpage1);
     TEST_RC_NOT_ZERO_ERROR
     PageNum paa;
     wpage1.GetPageNum(paa);
-    cout << "page num is " << paa << endl;
+    //cout << "page num is " << paa << endl;
     wpage1.GetData(wpdata);
-    cout << "wpdata:" << wpdata << endl;
-    cout << "file dbinfo:" << endl;
+    //cout << "wpdata:" << wpdata << endl;
+    //cout << "file dbinfo:" << endl;
+    cout<<"show dbinfo"<<endl;
 
     auto offsetptr = reinterpret_cast<int *>(wpdata);
     int offset = *offsetptr;
     if (offset == 0)
     {
-        cout << "dbinfo print end" << endl;
+        //cout << "dbinfo print end" << endl;
+        pf_filehandle.UnpinPage(paa);
         rc = pf_manager.CloseFile(pf_filehandle);
         TEST_RC_NOT_ZERO_ERROR
         return 0;
@@ -246,7 +248,7 @@ RC SM_Manager::ShowDb()
         counti++;
         wdbinfo++;
     }
-    cout << "dbinfo print end" << endl;
+    //cout << "dbinfo print end" << endl;
     pf_filehandle.UnpinPage(paa);
     rc = pf_manager.CloseFile(pf_filehandle);
     TEST_RC_NOT_ZERO_ERROR
@@ -293,7 +295,7 @@ RC SM_Manager::CreateTable(const char *tbName, tbinfos *tbinfo)
     RecordManager::getInstance().createFile(tbName, tbinfo->recordsize, 0);
 
     //create tbinfos
-    cout << "create table info file" << endl;
+    //cout << "create table info file" << endl;
     RC rc;
     PF_FileHandle file_handle;
     PF_PageHandle page_handle;
@@ -302,53 +304,52 @@ RC SM_Manager::CreateTable(const char *tbName, tbinfos *tbinfo)
     string str1(tbName);
     string str = str1 + "_tableinfo";
     rc = pf_manager.CreateFile(str.c_str());
-    cout << "Create file success" << endl;
+    //cout << "Create file success" << endl;
     TEST_RC_NOT_ZERO_ERROR*/
     string str(tbName);
     rc = pf_manager.OpenFile(str.c_str(), file_handle);
-    cout << "Open file success" << endl;
+    //cout << "Open file success" << endl;
     TEST_RC_NOT_ZERO_ERROR
 
     rc = file_handle.GetFirstPage(page_handle);
     TEST_RC_NOT_ZERO_ERROR
 
-    cout << "write data in tbinfo" << endl;
+    //cout << "write data in tbinfo" << endl;
     char *wpdata;
     rc = page_handle.GetData(wpdata);
     TEST_RC_NOT_ZERO_ERROR
-    //cout << "no zero error after write data in tbinfo" << endl;
+    ////cout << "no zero error after write data in tbinfo" << endl;
     auto wheader = reinterpret_cast<TableHeader *>(wpdata);
     auto wtbinfo = &(wheader->tb_info);
-    //cout << "wpdata is " << wpdata << endl;
-    //cout << "after" << endl;
+    ////cout << "wpdata is " << wpdata << endl;
+    ////cout << "after" << endl;
     copy_tbinfos(wtbinfo, tbinfo);
-    //cout<<"wtbinfo->columns:"<<wtbinfo->columns<<endl;
+    ////cout<<"wtbinfo->columns:"<<wtbinfo->columns<<endl;
     wtbinfo->strsize = strlen(tbName);
     strncpy(wtbinfo->tbname, tbName, wtbinfo->strsize);
     //write back
     rc = file_handle.MarkDirty(0);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "MarkDirty page 0 success" << endl;
+    //cout << "MarkDirty page 0 success" << endl;
     rc = file_handle.UnpinPage(0);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "UnpinPage page 0 success" << endl;
+    //cout << "UnpinPage page 0 success" << endl;
     rc = pf_manager.CloseFile(file_handle);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "write table info success" << endl
-         << endl;
+    //cout << "write table info success" << endl;
 
     //add info in tbinfo
     PF_FileHandle pf_filehandle;
     rc = pf_manager.OpenFile("whole_table_info", pf_filehandle);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "open whole_table_info success" << endl;
+    //cout << "open whole_table_info success" << endl;
     PF_PageHandle wpage1;
     pf_filehandle.GetFirstPage(wpage1);
     PageNum paa;
     wpage1.GetPageNum(paa);
     wpage1.GetData(wpdata);
     auto offsetptr = reinterpret_cast<int *>(wpdata);
-    cout << "write whole_table_info:" << endl;
+    //cout << "write whole_table_info:" << endl;
     auto whole_wtbinfo = reinterpret_cast<whole_tbinfos *>(wpdata + 4);
     whole_wtbinfo = whole_wtbinfo + (*offsetptr);
     whole_wtbinfo->strsize = strlen(tbName);
@@ -358,7 +359,7 @@ RC SM_Manager::CreateTable(const char *tbName, tbinfos *tbinfo)
     pf_filehandle.UnpinPage(paa);
     rc = pf_manager.CloseFile(pf_filehandle);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "write whole_table_info success" << endl;
+    //cout << "write whole_table_info success" << endl;
 
     return 0;
 }
@@ -373,50 +374,124 @@ RC SM_Manager::DropTable(const char *tbName)
     TEST_RC_NOT_ZERO_ERROR
     //rc = pf_manager.DestroyFile(str.c_str());
     //TEST_RC_NOT_ZERO_ERROR
-    cout << "drop table " << tbName << " success" << endl;
+
+    PF_FileHandle pf_filehandle;
+    rc = pf_manager.OpenFile("whole_table_info", pf_filehandle);
+    TEST_RC_NOT_ZERO_ERROR
+    //cout << "open whole_table_info success" << endl;
+    char *wpdata;
+    PF_PageHandle wpage1;
+    rc = pf_filehandle.GetFirstPage(wpage1);
+    TEST_RC_NOT_ZERO_ERROR
+    PageNum paa;
+    wpage1.GetPageNum(paa);
+    //cout << "page num is " << paa << endl;
+    wpage1.GetData(wpdata);
+    //cout << "wpdata:" << wpdata << endl;
+    //cout << "file whole_table_info:" << endl;
+
+    auto offsetptr = reinterpret_cast<int *>(wpdata);
+    int offset = *offsetptr;
+    if (offset == 0)
+    {
+        //cout << "clean tableinfo failed" << endl;
+        return 0;
+    }
+    auto wtbinfo = reinterpret_cast<whole_tbinfos *>(wpdata + 4);
+    int counti = 0;
+    while (counti < offset)
+    {
+        if(strncmp(wtbinfo->tbname, tbName, wtbinfo->strsize) == 0){
+            wtbinfo->strsize = -1;
+            //cout<<"clean tableinfo success, wtbname is "<<wtbinfo->tbname<<endl;
+            break;
+        }
+        counti++;
+        wtbinfo++;
+    }
+    rc = pf_filehandle.MarkDirty(paa);
+    TEST_RC_NOT_ZERO_ERROR
+    rc = pf_filehandle.UnpinPage(paa);
+    TEST_RC_NOT_ZERO_ERROR
+    //cout << "Unpinpage pa success" << endl;
+    rc = pf_manager.CloseFile(pf_filehandle);
+    //cout << "close file success" << endl;
+    TEST_RC_NOT_ZERO_ERROR
     return 0;
 }
 
 RC SM_Manager::InitTbInfo()
 {
     //Create table info file
-    cout << "create whole_table_info file" << endl;
+    //cout << "create whole_table_info file" << endl;
     RC rc;
     PF_FileHandle file_handle;
     PF_PageHandle page_handle;
     PF_Manager pf_manager;
     rc = pf_manager.CreateFile("whole_table_info");
-    cout << "Create file success" << endl;
+    //cout << "Create file success" << endl;
     TEST_RC_NOT_ZERO_ERROR
     rc = pf_manager.OpenFile("whole_table_info", file_handle);
-    cout << "Open file success" << endl;
+    //cout << "Open file success" << endl;
     TEST_RC_NOT_ZERO_ERROR
 
     rc = file_handle.AllocatePage(page_handle);
-    cout << "AllocatePage 1 success" << endl;
+    //cout << "AllocatePage 1 success" << endl;
     PageNum page1;
     page_handle.GetPageNum(page1);
-    cout << "page number is:" << page1;
+    //cout << "page number is:" << page1;
     TEST_RC_NOT_ZERO_ERROR
 
     char *wpdata;
     page_handle.GetData(wpdata);
     auto offsetptr = reinterpret_cast<int *>(wpdata);
     *offsetptr = 0;
-    cout << "init offset success" << endl;
+    //cout << "init offset success" << endl;
 
     //write back
     rc = file_handle.MarkDirty(page1);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "MarkDirty page 1 success" << endl;
+    //cout << "MarkDirty page 1 success" << endl;
     rc = file_handle.UnpinPage(page1);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "UnpinPage page 1 success" << endl;
+    //cout << "UnpinPage page 1 success" << endl;
     rc = pf_manager.CloseFile(file_handle);
     TEST_RC_NOT_ZERO_ERROR
 
-    cout << "init whole_table_info file success" << endl
-         << endl;
+    //cout << "init whole_table_info file success" << endl;
+    return 0;
+}
+
+RC SM_Manager::Descv(const char *tbName){
+    RC rc;
+    PF_Manager pf_manager;
+    PF_FileHandle file_handle;
+    PF_PageHandle page_handle;
+    rc = pf_manager.OpenFile(tbName, file_handle);
+    //cout << "Open file success" << endl;
+    TEST_RC_NOT_ZERO_ERROR
+
+    rc = file_handle.GetFirstPage(page_handle);
+    TEST_RC_NOT_ZERO_ERROR
+
+    cout <<endl<< "show data in tbinfo" << endl;
+    char *wpdata;
+    rc = page_handle.GetData(wpdata);
+    TEST_RC_NOT_ZERO_ERROR
+    ////cout << "no zero error after write data in tbinfo" << endl;
+    auto wheader = reinterpret_cast<TableHeader *>(wpdata);
+    auto wtbinfo = &(wheader->tb_info);
+
+    cout<<"table name is "<<wtbinfo->tbname<<endl;
+    cout<<"attrname is "<<wtbinfo->attrname[0]<<" attrsize is "<<wtbinfo->attrsize[0]<<endl;
+    cout<<"has pkey? "<<wtbinfo->has_pkey<<endl;
+    
+    rc = file_handle.UnpinPage(0);
+    TEST_RC_NOT_ZERO_ERROR
+    //cout << "UnpinPage page 0 success" << endl;
+    rc = pf_manager.CloseFile(file_handle);
+    TEST_RC_NOT_ZERO_ERROR
+    //cout << "show table info success" << endl;
     return 0;
 }
 
@@ -427,45 +502,50 @@ RC SM_Manager::ShowTb()
     PF_FileHandle pf_filehandle;
     rc = pf_manager.OpenFile("whole_table_info", pf_filehandle);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "open whole_table_info success" << endl;
+    //cout << "open whole_table_info success" << endl;
     char *wpdata;
     PF_PageHandle wpage1;
     rc = pf_filehandle.GetFirstPage(wpage1);
     TEST_RC_NOT_ZERO_ERROR
     PageNum paa;
     wpage1.GetPageNum(paa);
-    cout << "page num is " << paa << endl;
+    //cout << "page num is " << paa << endl;
     wpage1.GetData(wpdata);
-    cout << "wpdata:" << wpdata << endl;
-    cout << "file whole_table_info:" << endl;
+    //cout << "wpdata:" << wpdata << endl;
+    //cout << "file whole_table_info:" << endl;
+    cout<<"show tables in database:"<<endl;
 
     auto offsetptr = reinterpret_cast<int *>(wpdata);
     int offset = *offsetptr;
     if (offset == 0)
     {
-        cout << "whole_table_info print end" << endl;
+        //cout << "whole_table_info print end" << endl;
         rc = pf_filehandle.UnpinPage(paa);
         TEST_RC_NOT_ZERO_ERROR
-        cout << "Unpinpage pa success" << endl;
+        //cout << "Unpinpage pa success" << endl;
         rc = pf_manager.CloseFile(pf_filehandle);
         TEST_RC_NOT_ZERO_ERROR
-        cout << "closefile after pa success" << endl;
+        //cout << "closefile after pa success" << endl;
         return 0;
     }
     auto wtbinfo = reinterpret_cast<whole_tbinfos *>(wpdata + 4);
     int counti = 0;
     while (counti < offset)
     {
-        cout << wtbinfo->tbname << endl;
+        if (wtbinfo->strsize < 0){
+            //cout<<"cleaned: tbname is "<<wtbinfo->tbname<<endl;
+        }else{
+            cout << wtbinfo->tbname << endl;
+        } 
         counti++;
         wtbinfo++;
     }
-    cout << "whole_table_info print end" << endl;
+    //cout << "whole_table_info print end" << endl;
     rc = pf_filehandle.UnpinPage(paa);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "Unpinpage pa success" << endl;
+    //cout << "Unpinpage pa success" << endl;
     rc = pf_manager.CloseFile(pf_filehandle);
-    cout << "close file success" << endl;
+    //cout << "close file success" << endl;
     TEST_RC_NOT_ZERO_ERROR
     return 0;
 }
@@ -473,8 +553,8 @@ RC SM_Manager::ShowTb()
 RC SM_Manager::CreatePK(const char *tbName, int pkey)
 {
     //modify tbinfos
-    cout << "Create primary key" << endl;
-    cout << "modify table info file" << endl;
+    //cout << "Create primary key" << endl;
+    //cout << "modify table info file" << endl;
     RC rc;
     PF_FileHandle file_handle;
     PF_PageHandle page_handle;
@@ -483,14 +563,14 @@ RC SM_Manager::CreatePK(const char *tbName, int pkey)
     //string str = str1 + "_tableinfo";
     //rc = pf_manager.OpenFile(str.c_str(), file_handle);
     rc = pf_manager.OpenFile(str1.c_str(), file_handle);
-    cout << "Open file success" << endl;
+    //cout << "Open file success" << endl;
     TEST_RC_NOT_ZERO_ERROR
 
     rc = file_handle.GetFirstPage(page_handle);
     PageNum page1;
     page_handle.GetPageNum(page1);
 
-    cout << "modify data in tbinfo" << endl;
+    //cout << "modify data in tbinfo" << endl;
     char *wpdata;
     rc = page_handle.GetData(wpdata);
     TEST_RC_NOT_ZERO_ERROR
@@ -498,27 +578,26 @@ RC SM_Manager::CreatePK(const char *tbName, int pkey)
     auto wtbinfo = &(wheader->tb_info);
     wtbinfo->primary_key = pkey;
     wtbinfo->has_pkey = true;
-    cout << "add primary key completely" << endl;
-    cout << "primary key is " << wtbinfo->primary_key << endl;
+    //cout << "add primary key completely" << endl;
+    //cout << "primary key is " << wtbinfo->primary_key << endl;
 
     //write back
     rc = file_handle.MarkDirty(page1);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "MarkDirty page 1 success" << endl;
+    //cout << "MarkDirty page 1 success" << endl;
     rc = file_handle.UnpinPage(page1);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "UnpinPage page 1 success" << endl;
+    //cout << "UnpinPage page 1 success" << endl;
     rc = pf_manager.CloseFile(file_handle);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "modify table info success" << endl
-         << endl;
+    //cout << "modify table info success" << endl
 }
 
 RC SM_Manager::DropPK(const char *tbName)
 {
     //modify tbinfos
-    cout << "Drop primary key" << endl;
-    cout << "modify table info file" << endl;
+    //cout << "Drop primary key" << endl;
+    //cout << "modify table info file" << endl;
     RC rc;
     PF_FileHandle file_handle;
     PF_PageHandle page_handle;
@@ -526,14 +605,14 @@ RC SM_Manager::DropPK(const char *tbName)
     string str1(tbName);
     //string str = str1 + "_tableinfo";
     rc = pf_manager.OpenFile(str1.c_str(), file_handle);
-    cout << "Open file success" << endl;
+    //cout << "Open file success" << endl;
     TEST_RC_NOT_ZERO_ERROR
 
     rc = file_handle.GetFirstPage(page_handle);
     PageNum page1;
     page_handle.GetPageNum(page1);
 
-    cout << "modify data in tbinfo" << endl;
+    //cout << "modify data in tbinfo" << endl;
     char *wpdata;
     rc = page_handle.GetData(wpdata);
     TEST_RC_NOT_ZERO_ERROR
@@ -541,26 +620,25 @@ RC SM_Manager::DropPK(const char *tbName)
     auto wtbinfo = &(wheader->tb_info);
     //auto wtbinfo = reinterpret_cast<tbinfos *>(wpdata);
     wtbinfo->has_pkey = false;
-    cout << "drop primary key completely" << endl;
+    //cout << "drop primary key completely" << endl;
 
     //write back
     rc = file_handle.MarkDirty(page1);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "MarkDirty page 1 success" << endl;
+    //cout << "MarkDirty page 1 success" << endl;
     rc = file_handle.UnpinPage(page1);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "UnpinPage page 1 success" << endl;
+    //cout << "UnpinPage page 1 success" << endl;
     rc = pf_manager.CloseFile(file_handle);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "modify table info success" << endl
-         << endl;
+    //cout << "modify table info success" << endl
 }
 
 RC SM_Manager::CreateFK(const char *tbName, int fkey, const char *refertbname)
 {
     //modify tbinfos
-    cout << "Create foreign key" << endl;
-    cout << "modify table info file" << endl;
+    //cout << "Create foreign key" << endl;
+    //cout << "modify table info file" << endl;
     RC rc;
     PF_FileHandle file_handle;
     PF_PageHandle page_handle;
@@ -568,47 +646,46 @@ RC SM_Manager::CreateFK(const char *tbName, int fkey, const char *refertbname)
     string str1(tbName);
     //string str = str1 + "_tableinfo";
     rc = pf_manager.OpenFile(str1.c_str(), file_handle);
-    cout << "Open file success" << endl;
+    //cout << "Open file success" << endl;
     TEST_RC_NOT_ZERO_ERROR
 
     rc = file_handle.GetFirstPage(page_handle);
     PageNum page1;
     page_handle.GetPageNum(page1);
 
-    cout << "modify data in tbinfo" << endl;
+    //cout << "modify data in tbinfo" << endl;
     char *wpdata;
     rc = page_handle.GetData(wpdata);
     TEST_RC_NOT_ZERO_ERROR
     auto wheader = reinterpret_cast<TableHeader *>(wpdata);
     auto wtbinfo = &(wheader->tb_info);
     //auto wtbinfo = reinterpret_cast<tbinfos *>(wpdata);
-    cout<<"temp"<<endl<<endl;
-    cout<<"wtbinfo->fkey_num is "<<wtbinfo->fkey_num<<endl;
+    //cout<<"temp"<<endl<<endl;
+    //cout<<"wtbinfo->fkey_num is "<<wtbinfo->fkey_num<<endl;
     wtbinfo->foreign_key[wtbinfo->fkey_num] = fkey;
     wtbinfo->rnsize[wtbinfo->fkey_num] = strlen(tbName);
     strncpy(wtbinfo->reference[wtbinfo->fkey_num], tbName, wtbinfo->fkey_num);
     wtbinfo->fkey_num++;
-    cout << "add foreign key completely" << endl;
-    cout << "foreign key is " << wtbinfo->foreign_key[wtbinfo->fkey_num - 1] << endl;
+    //cout << "add foreign key completely" << endl;
+    //cout << "foreign key is " << wtbinfo->foreign_key[wtbinfo->fkey_num - 1] << endl;
 
     //write back
     rc = file_handle.MarkDirty(page1);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "MarkDirty page 1 success" << endl;
+    //cout << "MarkDirty page 1 success" << endl;
     rc = file_handle.UnpinPage(page1);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "UnpinPage page 1 success" << endl;
+    //cout << "UnpinPage page 1 success" << endl;
     rc = pf_manager.CloseFile(file_handle);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "modify table info success" << endl
-         << endl;
+    //cout << "modify table info success" << endl<< endl;
 }
 
 RC SM_Manager::DropFK(const char *tbName, int fkey, const char *refertbname)
 {
     //modify tbinfos
-    cout << "Drop foreign key" << endl;
-    cout << "modify table info file" << endl;
+    //cout << "Drop foreign key" << endl;
+    //cout << "modify table info file" << endl;
     RC rc;
     PF_FileHandle file_handle;
     PF_PageHandle page_handle;
@@ -616,14 +693,14 @@ RC SM_Manager::DropFK(const char *tbName, int fkey, const char *refertbname)
     string str1(tbName);
     //string str = str1 + "_tableinfo";
     rc = pf_manager.OpenFile(str1.c_str(), file_handle);
-    cout << "Open file success" << endl;
+    //cout << "Open file success" << endl;
     TEST_RC_NOT_ZERO_ERROR
 
     rc = file_handle.GetFirstPage(page_handle);
     PageNum page1;
     page_handle.GetPageNum(page1);
 
-    cout << "modify data in tbinfo" << endl;
+    //cout << "modify data in tbinfo" << endl;
     char *wpdata;
     rc = page_handle.GetData(wpdata);
     TEST_RC_NOT_ZERO_ERROR
@@ -644,45 +721,43 @@ RC SM_Manager::DropFK(const char *tbName, int fkey, const char *refertbname)
         }
     }
     wtbinfo->fkey_num--;
-    cout << "drop foreign key completely" << endl;
+    //cout << "drop foreign key completely" << endl;
 
     //write back
     rc = file_handle.MarkDirty(page1);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "MarkDirty page 1 success" << endl;
+    //cout << "MarkDirty page 1 success" << endl;
     rc = file_handle.UnpinPage(page1);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "UnpinPage page 1 success" << endl;
+    //cout << "UnpinPage page 1 success" << endl;
     rc = pf_manager.CloseFile(file_handle);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "modify table info success" << endl
-         << endl;
+    //cout << "modify table info success" << endl<< endl;
     return 0;
 }
 
 RC SM_Manager::AddColumn(const char *tbName, AttrType attrt, const char *attrname, int code, bool hd, int ll)
 {
     //modify tbinfos
-    cout << "Add Column" << endl;
-    cout << "modify table info file" << endl;
+    //cout << "Add Column" << endl;
+    //cout << "modify table info file" << endl;
     RC rc;
     PF_FileHandle file_handle;
     PF_PageHandle page_handle;
     PF_Manager pf_manager;
     string str1(tbName);
-    //string str = str1 + "_tableinfo";
     rc = pf_manager.OpenFile(str1.c_str(), file_handle);
-    cout << "Open file success" << endl;
+    //cout << "Open file success" << endl;
     TEST_RC_NOT_ZERO_ERROR
 
     rc = file_handle.GetFirstPage(page_handle);
     TEST_RC_NOT_ZERO_ERROR
     PageNum page1;
     page_handle.GetPageNum(page1);
-    cout << "page number is:" << page1;
+    //cout << "page number is:" << page1;
     TEST_RC_NOT_ZERO_ERROR
 
-    cout << "modify data in tbinfo" << endl;
+    //cout << "modify data in tbinfo" << endl;
     char *wpdata;
     rc = page_handle.GetData(wpdata);
     TEST_RC_NOT_ZERO_ERROR
@@ -726,14 +801,33 @@ RC SM_Manager::AddColumn(const char *tbName, AttrType attrt, const char *attrnam
     //write back
     rc = file_handle.MarkDirty(page1);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "MarkDirty page 1 success" << endl;
+    //cout << "MarkDirty page 1 success" << endl;
     rc = file_handle.UnpinPage(page1);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "UnpinPage page 1 success" << endl;
+    //cout << "UnpinPage page 1 success" << endl;
     rc = pf_manager.CloseFile(file_handle);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "modify table info success" << endl
-         << endl;
+    //cout << "modify table info success" << endl<< endl;
+
+    /*rc = pf_manager.OpenFile(str1.c_str(), file_handle);
+    //cout << "Open file success" << endl;
+    TEST_RC_NOT_ZERO_ERROR
+
+    rc = file_handle.GetFirstPage(page_handle);
+    TEST_RC_NOT_ZERO_ERROR
+
+    //cout << "copy data in first page:" << endl;
+    rc = page_handle.GetData(wpdata);
+    TEST_RC_NOT_ZERO_ERROR
+
+    RecordManager::getInstance().createFile("ff", 5, 1);
+    memcpy(dest, wpdata, 4092));
+
+    //cout << "" <<endl;
+    rc = file_handle.AllocatePage(page_handle);
+
+    rc = pf_manager.DestroyFile(file_handle);
+    TEST_RC_NOT_ZERO_ERROR*/
 
     return 0;
 }
@@ -741,8 +835,8 @@ RC SM_Manager::AddColumn(const char *tbName, AttrType attrt, const char *attrnam
 RC SM_Manager::DropColumn(const char *tbName, AttrType attrt, const char *attrname)
 {
     //modify tbinfos
-    cout << "Drop Column" << endl;
-    cout << "modify table info file" << endl;
+    //cout << "Drop Column" << endl;
+    //cout << "modify table info file" << endl;
     RC rc;
     PF_FileHandle file_handle;
     PF_PageHandle page_handle;
@@ -750,17 +844,17 @@ RC SM_Manager::DropColumn(const char *tbName, AttrType attrt, const char *attrna
     string str1(tbName);
     //string str = str1 + "_tableinfo";
     rc = pf_manager.OpenFile(str1.c_str(), file_handle);
-    cout << "Open file success" << endl;
+    //cout << "Open file success" << endl;
     TEST_RC_NOT_ZERO_ERROR
 
     rc = file_handle.GetFirstPage(page_handle);
     TEST_RC_NOT_ZERO_ERROR
     PageNum page1;
     page_handle.GetPageNum(page1);
-    cout << "page number is:" << page1;
+    //cout << "page number is:" << page1;
     TEST_RC_NOT_ZERO_ERROR
 
-    cout << "modify data in tbinfo" << endl;
+    //cout << "modify data in tbinfo" << endl;
     char *wpdata;
     rc = page_handle.GetData(wpdata);
     TEST_RC_NOT_ZERO_ERROR
@@ -781,14 +875,13 @@ RC SM_Manager::DropColumn(const char *tbName, AttrType attrt, const char *attrna
     //write back
     rc = file_handle.MarkDirty(page1);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "MarkDirty page 1 success" << endl;
+    //cout << "MarkDirty page 1 success" << endl;
     rc = file_handle.UnpinPage(page1);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "UnpinPage page 1 success" << endl;
+    //cout << "UnpinPage page 1 success" << endl;
     rc = pf_manager.CloseFile(file_handle);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "modify table info success" << endl
-         << endl;
+    //cout << "modify table info success" << endl<< endl;
 
     return 0;
 }
@@ -796,8 +889,8 @@ RC SM_Manager::DropColumn(const char *tbName, AttrType attrt, const char *attrna
 RC SM_Manager::ModifiedColumn(const char *tbName, AttrType src_attrt, const char *src_attrname, AttrType dest_attrt, const char *dest_attrname, int code, bool hd, int ll)
 {
     //modify tbinfos
-    cout << "Modify Column" << endl;
-    cout << "modify table info file" << endl;
+    //cout << "Modify Column" << endl;
+    //cout << "modify table info file" << endl;
     RC rc;
     PF_FileHandle file_handle;
     PF_PageHandle page_handle;
@@ -805,17 +898,17 @@ RC SM_Manager::ModifiedColumn(const char *tbName, AttrType src_attrt, const char
     string str1(tbName);
     //string str = str1 + "_tableinfo";
     rc = pf_manager.OpenFile(str1.c_str(), file_handle);
-    cout << "Open file success" << endl;
+    //cout << "Open file success" << endl;
     TEST_RC_NOT_ZERO_ERROR
 
     rc = file_handle.GetFirstPage(page_handle);
     TEST_RC_NOT_ZERO_ERROR
     PageNum page1;
     page_handle.GetPageNum(page1);
-    cout << "page number is:" << page1;
+    //cout << "page number is:" << page1;
     TEST_RC_NOT_ZERO_ERROR
 
-    cout << "modify data in tbinfo" << endl;
+    //cout << "modify data in tbinfo" << endl;
     char *wpdata;
     rc = page_handle.GetData(wpdata);
     TEST_RC_NOT_ZERO_ERROR
@@ -842,14 +935,13 @@ RC SM_Manager::ModifiedColumn(const char *tbName, AttrType src_attrt, const char
     //write back
     rc = file_handle.MarkDirty(page1);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "MarkDirty page 1 success" << endl;
+    //cout << "MarkDirty page 1 success" << endl;
     rc = file_handle.UnpinPage(page1);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "UnpinPage page 1 success" << endl;
+    //cout << "UnpinPage page 1 success" << endl;
     rc = pf_manager.CloseFile(file_handle);
     TEST_RC_NOT_ZERO_ERROR
-    cout << "modify table info success" << endl
-         << endl;
+    //cout << "modify table info success" << endl<< endl;
 
     return 0;
 }

@@ -21,11 +21,13 @@ public:
     RC initDbInfo();//init数据库信息 记录所有的数据库
     RC ShowDb();//列出现有的所有数据库以及其包含的所有表名
 
+    RC Descv(const char *tbName);//列出指定表的模式信息
+    
     //to modified
     RC CreateTable(const char *tbName, tbinfos* tbinfo);
     RC DropTable(const char *tbName);
     RC InitTbInfo();//init表信息 记录所有的表
-    RC ShowTb();//列出现有的所有表以及其模式信息
+    RC ShowTb();//列出现有的所有表
 
     //主键的添加与取消
     //to modified

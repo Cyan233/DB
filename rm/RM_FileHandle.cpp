@@ -30,14 +30,14 @@ int RM_FileHandle::getRecord(const RID& rid, Record &record) const {
 
 int RM_FileHandle::insertRecord(const char *pData, RID& rid) {
     //debug
-    cout<<endl<<"insert record in rm file, data is"<<pData<<endl;
+    //cout<<endl<<"insert record in rm file, data is"<<pData<<endl;
     int rc;
     // find spare page
     if (table_header.first_spare_page <= 0) {
         rc = insertPage();
         TEST_RC_NOT_ZERO_ERROR
         //debug
-        cout<<"insert page in rm file success"<<endl;
+        //cout<<"insert page in rm file success"<<endl;
     }
     //find spare slot
     unsigned pageID = table_header.first_spare_page;
@@ -46,12 +46,12 @@ int RM_FileHandle::insertRecord(const char *pData, RID& rid) {
     rc = pf_file_handle.GetThisPage(pageID, page_handle);
     TEST_RC_NOT_ZERO_ERROR   //**
     //debug
-    cout<<"get pageID, pageID is "<<pageID<<endl;
+    //cout<<"get pageID, pageID is "<<pageID<<endl;
     page_handle.GetData(page_data);
     MyBitMap bitmap(table_header.slot_map_size << 3, reinterpret_cast<unsigned *>(page_data + 8));
     unsigned slotID = bitmap.findLeftOne();  //一定会找到空闲的slot
     //debug
-    cout<<"find slotID, slotID is "<<slotID<<endl;
+    //cout<<"find slotID, slotID is "<<slotID<<endl;
     memcpy(page_data + getOffset(slotID), pData, table_header.record_size);
     // update
     bitmap.setBit(slotID, 0);
@@ -64,7 +64,7 @@ int RM_FileHandle::insertRecord(const char *pData, RID& rid) {
     rid.slotID = slotID;
     rid.pageID = pageID;
     //debug
-    cout<<endl<<"insert record success"<<endl;
+    //cout<<endl<<"insert record success"<<endl;
 
     rc = pf_file_handle.MarkDirty(rid.pageID);
     TEST_RC_NOT_ZERO_ERROR
@@ -116,7 +116,8 @@ int RM_FileHandle::insertPage() {
     char *page_data;
     int rc = pf_file_handle.AllocatePage(page_handle);
     TEST_RC_NOT_ZERO_ERROR
-    page_handle.GetData(page_data);
+    rc = page_handle.GetData(page_data);
+    TEST_RC_NOT_ZERO_ERROR
     reinterpret_cast<int *>(page_data)[0] = table_header.first_spare_page;
     table_header.first_spare_page = table_header.page_num;
     table_header.page_num += 1;
@@ -128,8 +129,4 @@ int RM_FileHandle::insertPage() {
     rc = pf_file_handle.UnpinPage(table_header.page_num-1);
     TEST_RC_NOT_ZERO_ERROR
     return 0;
-}
-
-unsigned RM_FileHandle::getOffset(unsigned slot_num) const {
-    return 8 + table_header.slot_map_size + slot_num * table_header.record_size;  //单位都是byte
 }
