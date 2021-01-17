@@ -485,6 +485,9 @@ RC SM_Manager::Descv(const char *tbName){
     cout<<"table name is "<<wtbinfo->tbname<<endl;
     for (int i = 0; i < wtbinfo->columns; ++i)
     {
+        if(wtbinfo->colattr[i] == AttrType::NO_ATTR){
+            continue;
+        }
         string str_p(wtbinfo->attrname[i],wtbinfo->attrsize[i]);
         cout<<"attrname is "<<str_p<<endl;
         cout<<"can be null? "<<wtbinfo->cannull[i]<<endl<<endl;
@@ -561,7 +564,7 @@ RC SM_Manager::ShowTb()
     return 0;
 }
 
-RC SM_Manager::CreatePK(const char *tbName, int pkey)
+RC SM_Manager::CreatePK(const char *tbName, const char* pkey)
 {
     //modify tbinfos
     //cout << "Create primary key" << endl;
@@ -587,10 +590,16 @@ RC SM_Manager::CreatePK(const char *tbName, int pkey)
     TEST_RC_NOT_ZERO_ERROR
     auto wheader = reinterpret_cast<TableHeader *>(wpdata);
     auto wtbinfo = &(wheader->tb_info);
-    wtbinfo->primary_key = pkey;
+    for (int i = 0; i < wtbinfo->columns; ++i)
+    {
+        if (strncmp(wtbinfo->attrname[i],pkey,wtbinfo->attrsize[i]) == 0){
+            wtbinfo->primary_key = i;
+            break;
+        }
+    }
     wtbinfo->has_pkey = true;
-    //cout << "add primary key completely" << endl;
-    //cout << "primary key is " << wtbinfo->primary_key << endl;
+    cout << "add primary key completely" << endl;
+    cout << "primary key is " << wtbinfo->primary_key << endl;
 
     //write back
     rc = file_handle.MarkDirty(page1);
@@ -720,7 +729,8 @@ RC SM_Manager::DropFK(const char *tbName, int fkey, const char *refertbname)
     //auto wtbinfo = reinterpret_cast<tbinfos *>(wpdata);
     for (int i = 0; i < wtbinfo->fkey_num; ++i)
     {
-        if (wtbinfo->foreign_key[i] == fkey && wtbinfo->rnsize[i] == strlen(refertbname) && strncmp(wtbinfo->reference[i], refertbname, wtbinfo->rnsize[i]) == 0)
+        //if (wtbinfo->foreign_key[i] == fkey && wtbinfo->rnsize[i] == strlen(refertbname) && strncmp(wtbinfo->reference[i], refertbname, wtbinfo->rnsize[i]) == 0)
+        if(true)
         {
             for (int j = i; j < wtbinfo->fkey_num - 1; ++j)
             {
@@ -876,7 +886,7 @@ RC SM_Manager::DropColumn(const char *tbName, AttrType attrt, const char *attrna
     //todo 此处直接置空 maybe 改进
     for (int i = 0; i < wtbinfo->columns; ++i)
     {
-        if (wtbinfo->colattr[i] == attrt && wtbinfo->attrsize[i] == strlen(attrname) && strncmp(wtbinfo->attrname[i], attrname, wtbinfo->attrsize[i]) == 0)
+        if (wtbinfo->attrsize[i] == strlen(attrname) && strncmp(wtbinfo->attrname[i], attrname, wtbinfo->attrsize[i]) == 0)
         {
             wtbinfo->colattr[i] = AttrType::NO_ATTR;
             break;

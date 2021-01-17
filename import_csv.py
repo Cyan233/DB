@@ -1,6 +1,6 @@
 import csv
 
-with open('data.csv', encoding='utf-8') as f:
+with open('customer.csv', encoding='utf-8') as f:
     reader = csv.reader(f)
     print("header:")
     header = next(reader)

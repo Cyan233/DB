@@ -31,7 +31,7 @@ public:
 
     //主键的添加与取消
     //to modified
-    RC CreatePK(const char *tbName, int pkey);
+    RC CreatePK(const char *tbName, const char *pkey);
     RC DropPK(const char *tbName);
 
     //外键的添加与取消

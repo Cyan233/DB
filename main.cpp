@@ -101,6 +101,7 @@ Condition parseWhere(string s){
 
 int main(int args, char **argv)
 {
+    QueryManager qm;
     if (args <= 1)
     {
         cout << "init" << endl;
@@ -166,8 +167,6 @@ int main(int args, char **argv)
     }
     else
     {
-        QueryManager qm;
-        MyBitMap::initConst();
         char read[1000];
         cout << "please input orders:" << endl;
         while (cin.getline(read, 1000))
@@ -220,12 +219,10 @@ int main(int args, char **argv)
                                         if (strncmp(buffer.c_str(), "INT", buffer.size()) == 0)
                                         {
                                             tbinfoff.colattr[tbinfoff.columns] = AttrType::INT;
-                                            tbinfoff.attrsize[tbinfoff.columns] = 4;
                                         }
                                         else if (strncmp(buffer.c_str(), "FLOAT", buffer.size()) == 0)
                                         {
                                             tbinfoff.colattr[tbinfoff.columns] = AttrType::FLOAT;
-                                            tbinfoff.attrsize[tbinfoff.columns] = 4;
                                         }
                                         else
                                         {
@@ -236,20 +233,26 @@ int main(int args, char **argv)
                                     {
                                         istringstream iss(buffer);
                                         int llimit;
-                                        iss>>llimit;
+                                        iss >> llimit;
                                         tbinfoff.length_limit[tbinfoff.columns] = llimit;
-                                        cout<<llimit<<endl;
-                                    }else{
+                                        cout << llimit << endl;
+                                    }
+                                    else
+                                    {
                                         tbinfoff.length_limit[tbinfoff.columns] = -1;
                                     }
                                     str >> ll;
-                                    if (strncmp(ll.c_str(), "NOT", ll.size()) == 0){
+                                    if (strncmp(ll.c_str(), "NOT", ll.size()) == 0)
+                                    {
+                                        tbinfoff.cannull[tbinfoff.columns] = false;
+                                        str >> ll; //NULL
+                                        str >> ll; //, or )
+                                    }else{
                                         tbinfoff.cannull[tbinfoff.columns] = true;
-                                        str >> ll;//NULL
-                                        str >> ll;//, or )
                                     }
                                     tbinfoff.columns++;
-                                    if (strncmp(ll.c_str(), ",", ll.size()) == 0){
+                                    if (strncmp(ll.c_str(), ",", ll.size()) == 0)
+                                    {
                                         continue;
                                     }
                                 }
@@ -417,7 +420,140 @@ int main(int args, char **argv)
                     }
                     else if (strncmp(out.c_str(), "ALTER", out.size()) == 0)
                     {
-                        //mm todo
+                        str >> out;
+                        if (strncmp(out.c_str(), "TABLE", out.size()) == 0)
+                        {
+                            string tablename;
+                            str >> tablename;
+                            cout<<"tablename is "<<tablename<<endl;
+                            str >> out;
+                            if (strncmp(out.c_str(), "ADD", out.size()) == 0)
+                            {
+                                str >> out;
+                                if (strncmp(out.c_str(), "COLUMN", out.size()) == 0)
+                                {
+                                    string column_name;
+                                    str >> column_name;
+                                    str >> out;
+                                    if (strncmp(out.c_str(), ";", out.size()) != 0)
+                                    {
+                                        string ll;
+                                        string buffer;
+                                        str >> ll;
+                                        istringstream ill(ll);
+                                        AttrType at;
+                                        int llimit;
+                                        bool cannull;
+                                        if (getline(ill, buffer, '('))
+                                        {
+                                            cout << buffer << endl;
+                                            if (strncmp(buffer.c_str(), "INT", buffer.size()) == 0)
+                                            {
+                                                at = AttrType::INT;
+                                            }
+                                            else if (strncmp(buffer.c_str(), "FLOAT", buffer.size()) == 0)
+                                            {
+                                                at = AttrType::FLOAT;
+                                            }
+                                            else
+                                            {
+                                                at = AttrType::STRING;
+                                            }
+                                        }
+                                        if (getline(ill, buffer, ')'))
+                                        {
+                                            istringstream iss(buffer);
+                                            int llimit;
+                                            iss >> llimit;
+                                            cout << llimit << endl;
+                                        }
+                                        else
+                                        {
+                                            llimit = -1;
+                                        }
+                                        str >> ll;
+                                        if (strncmp(ll.c_str(), "NOT", ll.size()) == 0)
+                                        {
+                                            str >> ll; //NULL
+                                            str >> ll; //, or )
+                                        }
+                                        cout<<"addcolumn"<<endl;
+                                        SM_Manager::GetInstance().AddColumn(tablename.c_str(), at, column_name.c_str(), 6, 0, llimit);
+                                    }
+                                }
+                                else if (strncmp(out.c_str(), "PRIMARY", out.size()) == 0)
+                                {
+                                    str >> out;
+                                    str >> out;
+                                    string colname;
+                                    str >> colname;
+                                    SM_Manager::GetInstance().CreatePK(tablename.c_str(), colname.c_str());
+                                }
+                                else if (strncmp(out.c_str(), "FOREIGN", out.size()) == 0)
+                                {
+                                    str >> out;
+                                    str >> out;
+                                    str >> out;
+                                    str >> out;
+                                    str >> out;
+                                    string buffer;
+                                    istringstream ddd(out);
+                                    getline(ddd, buffer, '(');
+                                    SM_Manager::GetInstance().CreateFK(tablename.c_str(), 10, buffer.c_str());
+                                }
+                                else if (strncmp(out.c_str(), "INDEX", out.size()) == 0)
+                                {
+                                    str >> out;
+                                    string buffer;
+                                    string nameee;
+                                    istringstream ddd(out);
+                                    getline(ddd, buffer, '(');
+                                    getline(ddd, nameee, ')');
+                                    IX_Manager::GetInstance().CreateIndex(tablename.c_str(), buffer.size(), AttrType::INT, 6, 6);
+                                }
+                                else
+                                {
+                                    //todo nothing
+                                }
+                            }
+                            else if (strncmp(out.c_str(), "DROP", out.size()) == 0)
+                            {
+                                str >> out;
+                                if (strncmp(out.c_str(), "COLUMN", out.size()) == 0)
+                                {
+                                    string column_name;
+                                    str >> column_name;
+                                    cout<<"drop column"<<endl;
+                                    SM_Manager::GetInstance().DropColumn(tablename.c_str(), AttrType::INT, column_name.c_str());
+                                }
+                                else if (strncmp(out.c_str(), "PRIMARY", out.size()) == 0)
+                                {
+                                    SM_Manager::GetInstance().DropPK(tablename.c_str());
+                                }
+                                else if (strncmp(out.c_str(), "FOREIGN", out.size()) == 0)
+                                {
+                                    SM_Manager::GetInstance().DropFK(tablename.c_str(), 10, "ddddddd");
+                                }
+                                else if (strncmp(out.c_str(), "INDEX", out.size()) == 0)
+                                {
+                                    str >> out;
+                                    IX_Manager::GetInstance().DestroyIndex(tablename.c_str(), out.size());
+                                }
+                                else
+                                {
+                                    //todo nothing
+                                }
+                            }
+                            else if (strncmp(out.c_str(), "RENAME", out.size()) == 0)
+                            {
+                                str >> out;
+                                string newname;
+                                str >> newname;
+                                char cmd[200];
+                                sprintf(cmd, "mv %s %s", tablename.c_str(), newname.c_str());
+                                system(cmd);
+                            }
+                        }
                     }
                     else
                     {
