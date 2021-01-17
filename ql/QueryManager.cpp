@@ -176,7 +176,7 @@ int jointSelect(int level, vector<Record> path, const vector<Condition_joint> &c
                     new_codition.compOp = switchLeftRight(condition.compOp);
                     match = 0;
                 }
-                new_codition.col = condition.cols[!match];
+                strcpy(new_codition.col,condition.cols[!match].attr_name);
                 int offset = 0;
                 for (int i = 0; i < tbinfos[level].columns; i++) {  // 找到需要替换的值
                     if (strcmp(condition.cols[match].attr_name, tbinfos[level].attrname[i]) == 0) {
@@ -189,7 +189,7 @@ int jointSelect(int level, vector<Record> path, const vector<Condition_joint> &c
                                 break;
                             case AttrType::DATE :
                             case AttrType::STRING :
-                                new_codition.compare_value.s = record.data + offset;
+                                strcpy(new_codition.compare_value.s, record.data + offset);
                                 break;
                         }
                         break;
@@ -198,7 +198,7 @@ int jointSelect(int level, vector<Record> path, const vector<Condition_joint> &c
                 }
                 // 筛选这一条件的相连的表的结果
                 for (int i = 0; i < tbnames.size(); i++) {
-                    if(strcmp(tbnames[i], new_codition.col.tb_name)==0){
+                    if(strcmp(tbnames[i], new_codition.col)==0){
                         changed_col = i;
                         vector<Condition> new_vec;
                         new_vec.push_back(new_codition);

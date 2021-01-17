@@ -268,9 +268,30 @@ int main(int args, char **argv)
                         }
                         qm.Delete(tbname, wheres);
                     }
-                    else if (strncmp(out.c_str(), "UPDATE", out.size()) == 0)
+                    else if (strncmp(out.c_str(), "UPDATE", out.size()) == 0)  // UPDATE nation SET n_regionkey = 316001 WHERE n_nationkey=15;
                     {
-                        //todo
+                        string tbname;
+                        str>>tbname;
+                        cout<<tbname;
+                        //set
+                        str>>out;
+                        SetClause setcl;
+                        str>>setcl.attr_name;
+                        str>>out; str>>out;
+                        setcl.set_value.i = atoi(out.c_str());
+                        setcl.set_value.f =  atof(out.c_str());
+                        strcpy(setcl.set_value.s, out.c_str());
+                        vector<SetClause> setcls;
+                        setcls.push_back(setcl);
+                        //where
+                        str>>out;
+                        string where;
+                        vector<Condition> wheres;
+                        while(getline(str,where,',')){
+                            if(where[where.length()-1]==';') where = where.substr(0, where.length()-1);
+                            wheres.push_back(parseWhere(where));
+                        }
+                        qm.Delete(tbname, wheres);
                     }
                     else if (strncmp(out.c_str(), "SELECT", out.size()) == 0)
                     {

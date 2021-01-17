@@ -52,6 +52,18 @@ ql/QueryManager.h
 ../rm/struct.h
 /Users/cyan/Desktop/2020autumn/数据库/DB/rm/struct.h
 
+/Users/cyan/Desktop/2020autumn/数据库/DB/rm/Compare.cpp
+Compare.h
+/Users/cyan/Desktop/2020autumn/数据库/DB/rm/Compare.h
+iostream
+/Users/cyan/Desktop/2020autumn/数据库/DB/rm/iostream
+
+/Users/cyan/Desktop/2020autumn/数据库/DB/rm/Compare.h
+struct.h
+/Users/cyan/Desktop/2020autumn/数据库/DB/rm/struct.h
+vector
+/Users/cyan/Desktop/2020autumn/数据库/DB/rm/vector
+
 /Users/cyan/Desktop/2020autumn/数据库/DB/rm/RM_FileHandle.h
 ../pf/pf.h
 /Users/cyan/Desktop/2020autumn/数据库/DB/pf/pf.h
