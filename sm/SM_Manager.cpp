@@ -483,8 +483,19 @@ RC SM_Manager::Descv(const char *tbName){
     auto wtbinfo = &(wheader->tb_info);
 
     cout<<"table name is "<<wtbinfo->tbname<<endl;
-    cout<<"attrname is "<<wtbinfo->attrname[0]<<" attrsize is "<<wtbinfo->attrsize[0]<<endl;
-    cout<<"has pkey? "<<wtbinfo->has_pkey<<endl;
+    for (int i = 0; i < wtbinfo->columns; ++i)
+    {
+        string str_p(wtbinfo->attrname[i],wtbinfo->attrsize[i]);
+        cout<<"attrname is "<<str_p<<endl;
+        cout<<"can be null? "<<wtbinfo->cannull[i]<<endl<<endl;
+    }
+    cout<<"has pkey? "<<wtbinfo->has_pkey<<endl<<endl;
+    for (int i = 0; i < wtbinfo->fkey_num; ++i)
+    {
+        string str_p(wtbinfo->reference[i],wtbinfo->rnsize[i]);
+        cout<<"fkey "<<i<<" is "<<wtbinfo->foreign_key[i]<<endl;
+        cout<<"reference file is "<<str_p<<endl<<endl;
+    }
     
     rc = file_handle.UnpinPage(0);
     TEST_RC_NOT_ZERO_ERROR
