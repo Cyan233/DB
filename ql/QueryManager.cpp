@@ -77,6 +77,7 @@ int QueryManager::Delete(const string& tbname, vector<Condition> &where_conditio
 }
 
 int QueryManager::Update(const string& tbname, vector<Condition> &where_conditions, vector<SetClause>& set_clauses){
+    cout<<"update"<<endl;
     RM_FileHandle file_handle;
     int rc = RecordManager::getInstance().openFile(tbname, file_handle);
     TEST_RC_NOT_ZERO_ERROR
@@ -92,13 +93,16 @@ int QueryManager::Update(const string& tbname, vector<Condition> &where_conditio
                     switch (tb_info.colattr[i]){
                         case AttrType::INT :
                             memcpy(record.data+offset, &set_clause.set_value.i, sizeof(int));
+                            cout<<set_clause.set_value.i<<",";
                             break;
                         case AttrType::FLOAT :
                             memcpy(record.data+offset, &set_clause.set_value.f, sizeof(float));
+                            cout<<set_clause.set_value.f<<",";
                             break;
                         case AttrType::DATE :
                         case AttrType::STRING :
                             memcpy(record.data+offset, &set_clause.set_value.s, tb_info.attrsize[i]);
+                            printf("%.*s\n", tb_info.attrsize[i], record.data + offset);
                             break;
                     }
                     break;
@@ -106,6 +110,7 @@ int QueryManager::Update(const string& tbname, vector<Condition> &where_conditio
                 offset += tb_info.attrsize[i];
             }
         }
+        cout<<endl;
         rc = file_handle.updateRecord(record);
         TEST_RC_NOT_ZERO_ERROR
     }
@@ -235,8 +240,10 @@ int QueryManager::Select(vector<char*>& tbnames, vector<vector<Col>>& selector, 
     }
     Record record;
     RM_FileScan scan;
+    cout<<"select";
     // 1.如果只有一个数据表
     if (tbnames.size()==1){
+        cout<<" one"<<endl;
         scan.startScan(&file_handle[0], &conditions[0]);
         cout<<"number of conditions is "<<conditions[0].size()<<endl;
         while (scan.getNextRecord(record) == 0) {  //找得到记录，更改其值
