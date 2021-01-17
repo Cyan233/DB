@@ -1,11 +1,35 @@
 #include <iostream>
 #include <sstream>
+#include <string>
+using namespace std;
 
 #include "rm/RecordManager.h"
 #include "rm/RM_FileHandle.h"
 #include "utils/MyBitMap.h"
 #include "ix/IX_Manager.h"
 #include "sm/SM_Manager.h"
+#include "ql/QueryManager.h"
+
+Condition parseWhere(string s){
+    Condition where = Condition();
+    int position = 0;
+    if(s.find('=')!=string::npos){
+        position = s.find('=');
+        where.compOp = CompOp ::EQ_OP;
+    } else if(s.find('<')!=string::npos){
+        position = s.find('<');
+        where.compOp = CompOp ::EQ_OP;
+    } else if(s.find('>')!=string::npos){
+        position = s.find('>');
+        where.compOp = CompOp ::EQ_OP;
+    }
+    strcpy(where.col, s.substr(0, position).c_str());
+    s = s.substr(position);
+    where.compare_value.i = atoi(s.c_str());
+    where.compare_value.f =  atof(s.c_str());
+    strcpy(where.compare_value.s, s.c_str());
+    return where;
+}
 
 int main(int args, char **argv)
 {
@@ -73,6 +97,8 @@ int main(int args, char **argv)
     }
     else
     {
+        QueryManager qm;
+        MyBitMap::initConst();
         char read[1000];
         cout << "please input orders:" << endl;
         while (cin.getline(read, 1000))
@@ -125,10 +151,12 @@ int main(int args, char **argv)
                                         if (strncmp(buffer.c_str(), "INT", buffer.size()) == 0)
                                         {
                                             tbinfoff.colattr[tbinfoff.columns] = AttrType::INT;
+                                            tbinfoff.attrsize[tbinfoff.columns] = 4;
                                         }
                                         else if (strncmp(buffer.c_str(), "FLOAT", buffer.size()) == 0)
                                         {
                                             tbinfoff.colattr[tbinfoff.columns] = AttrType::FLOAT;
+                                            tbinfoff.attrsize[tbinfoff.columns] = 4;
                                         }
                                         else
                                         {
@@ -190,13 +218,55 @@ int main(int args, char **argv)
                             SM_Manager::GetInstance().Descv(out.c_str());
                         }
                     }
-                    else if (strncmp(out.c_str(), "INSERT", out.size()) == 0)
+                    else if (strncmp(out.c_str(), "INSERT", out.size()) == 0)  //INSERT INTO nation VALUES (0,'America');
                     {
-                        //todo
+                        str>>out;
+                        string tbname;
+                        str>>tbname;
+                        cout<<tbname;
+                        str>>out;
+                        string values;
+                        vector<vector<value>> records;
+                        vector<value> record;
+                        RM_FileHandle file_handle;
+                        int rc = RecordManager::getInstance().openFile(tbname, file_handle);
+                        TEST_RC_NOT_ZERO_ERROR
+                        tbinfos tb_info = file_handle.getHeader().tb_info;
+                        int i=0;
+                        while(getline(str,values,',')){
+                            if(values[0]==' ') values = values.substr(1, values.length()-1);
+                            if(values[0]=='(') values = values.substr(1, values.length()-1);
+                            if(values[values.length()-1]==' ') values = values.substr(0, values.length()-1);
+                            if(values[values.length()-1]==')') values = values.substr(0, values.length()-1);
+                            if(values[values.length()-1]==';') values = values.substr(0, values.length()-2);
+                            cout<<values;
+                            value _value{};
+                            if(tb_info.colattr[i]==AttrType::INT){
+                                _value.i =  atoi(values.c_str());
+                            }else if(tb_info.colattr[i]==AttrType::FLOAT){
+                                _value.f =  atof(values.c_str());
+                            }else{
+                                strcpy(_value.s, values.c_str());
+                            }
+                            record.push_back(_value);
+                            i++;
+                        }
+                        qm.Insert(tbname, records);
                     }
-                    else if (strncmp(out.c_str(), "DELETE", out.size()) == 0)
+                    else if (strncmp(out.c_str(), "DELETE", out.size()) == 0) // DELETE FROM customer WHERE c_custkey=5;
                     {
-                        //todo
+                        string tbname;
+                        str>>out;
+                        str>>tbname;
+                        cout<<tbname;
+                        str>>out;
+                        string where;
+                        vector<Condition> wheres;
+                        while(getline(str,where,',')){
+                            if(where[where.length()-1]==';') where = where.substr(0, where.length()-1);
+                            wheres.push_back(parseWhere(where));
+                        }
+                        qm.Delete(tbname, wheres);
                     }
                     else if (strncmp(out.c_str(), "UPDATE", out.size()) == 0)
                     {

@@ -25,6 +25,10 @@ IX_IndexHandle.h
 /Users/cyan/Desktop/2020autumn/数据库/DB/main.cpp
 iostream
 -
+sstream
+-
+string
+-
 rm/RecordManager.h
 /Users/cyan/Desktop/2020autumn/数据库/DB/rm/RecordManager.h
 rm/RM_FileHandle.h

@@ -47,10 +47,10 @@ struct TableHeader {  //整张表的特征信息，存储在第一页
     tbinfos tb_info;
 };
 
-union value{
+struct value{
     int i;
     float f;
-    char* s;
+    char s[100];
 };
 
 struct Col{  //比如 teacher.name
@@ -60,7 +60,7 @@ struct Col{  //比如 teacher.name
 
 struct Condition{  //比如 teacheer.name < 100
     CompOp compOp;
-    Col col;
+    char *col;
     value compare_value;
 };
 
